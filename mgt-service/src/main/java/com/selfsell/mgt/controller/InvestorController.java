@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.breeze.bms.mgt.bean.ResultMap;
-import com.selfsell.investee.share.InvesteeListREQ;
-import com.selfsell.mgt.service.InvesteeService;
+import com.selfsell.investor.share.AppBannerListREQ;
+import com.selfsell.mgt.service.InvestorService;
 
 /**
  * 
@@ -15,15 +15,15 @@ import com.selfsell.mgt.service.InvesteeService;
  *
  */
 @RestController
-@RequestMapping(value = "investee")
-public class InvesteeController {
+@RequestMapping(value = "investor")
+public class InvestorController {
 
 	@Autowired
-	InvesteeService investeeService;
+	InvestorService investorService;
 
-	@RequestMapping(value = "list")
-	public ResultMap list(@ModelAttribute InvesteeListREQ investeeListReq) {
-		return investeeService.list(investeeListReq);
+	@RequestMapping(value = "appBannerList")
+	public ResultMap appBannerList(@ModelAttribute AppBannerListREQ appBannerListREQ) {
+		return investorService.appBannerList(appBannerListREQ);
 	}
 
 }

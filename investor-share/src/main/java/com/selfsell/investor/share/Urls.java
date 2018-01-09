@@ -33,4 +33,8 @@ public class Urls {
 	 * 修改密码
 	 */
 	public static final String INVESTOR_MODIFY_PASSWORD = "/investor/modify/password";
+	/**
+	 * app欢迎页管理列表
+	 */
+	public static final String APP_BANNER_LIST = "/app/banner/list";
 }

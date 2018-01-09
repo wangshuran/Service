@@ -1,5 +1,6 @@
 apply plugin: 'war'
 dependencies {
+	compile project(":investor-share")
 	compile project(":investee-share")
 	compile files('lib/mgt_base.jar')
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
