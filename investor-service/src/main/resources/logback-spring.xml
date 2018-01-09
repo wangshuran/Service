@@ -1,0 +1,39 @@
+<configuration>
+	<springProperty scope="context" name="app_name" source="spring.application.name" />
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+	<property name="LOG_FILE" value="/var/log/investee.log" />
+	<property name="LOG_FILE_FEIGN" value="/var/log/investee-feign.log" />
+	<jmxConfigurator />
+	<appender name="ROLLINGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}.%i</fileNamePattern>
+			<MaxFileSize>10MB</MaxFileSize>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level%logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ROLLINGFILE_FEIGN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_FILE_FEIGN}</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_FILE_FEIGN}.%d{yyyy-MM-dd}.%i</fileNamePattern>
+			<MaxFileSize>10MB</MaxFileSize>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd} %d{HH:mm:ss.SSS} [%thread] %-5level%logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="ROLLINGFILE" />
+		<appender-ref ref="CONSOLE" />
+	</root>
+	
+	<logger name="com.selfsell.investee.client" level="DEBUG" additivity="false">
+		<appender-ref ref="ROLLINGFILE_FEIGN" />
+	</logger>
+
+</configuration>

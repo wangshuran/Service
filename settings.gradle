@@ -1,0 +1,1 @@
+include 'common','investee-service','investee-share','investor-service','investor-share','mgt-service','eureka-server'

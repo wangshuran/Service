@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>SelfSell管理后台</title>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script th:inline="javascript">
+    var context = /*[[@{/}]]*/;
+    context = context.substring(0,context.length-1);
+</script>
+
+<script type="text/javascript" th:src="@{/resources/lib/ext4/shared/include-ext.js}"></script>
+<script type="text/javascript" th:src="@{/resources/lib/ext4/shared/options-toolbar.js}"></script>
+<script type="text/javascript" th:src="@{/resources/lib/sockjs.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/lib/stomp.min.js}"></script>
+
+<link rel="stylesheet" type="text/css" th:href="@{/resources/console/css/systemui.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/resources/console/css/index.css}" />
+
+
+
+</head>
+
+<body>
+    <div id="loading-mask" style=""></div>
+    <div id="loading">
+        <div class="loading-indicator">
+            <img th:src="@{/resources/console/images/extanim32.gif}" width="32" height="32" style="margin-right: 8px; float: left; vertical-align: top;"> <span id="loading-msg">页面加载中...</span>
+        </div>
+    </div>
+
+    <div id="header">
+        <!--<div id=logoDiv>
+					<img id="logo" src="${self.path.console}/images/logo.png" />
+				</div>-->
+        <div id="titleDiv">SelfSell</div>
+        <div id="welcomeDiv">
+            <span id="groupNameSpan"><span class="left">部门：</span> <span class="right"><th:block th:text="${session.sessionShiroOrg.orgName}"></th:block></span></span> <span id="userNameSpan"><span class="left">姓名：</span> <span class="right"> <th:block th:text="${session.sessionShiroUser.userName}"></th:block></span></span>
+        </div>
+        <div id="menuDiv">
+            <a href="javascript:void(0);" onclick="javascript:showChangePwdWin()">修改密码</a> <a href="javascript:void(0);" onclick="javascript:logout();">退出</a>
+        </div>
+    </div>
+
+    <script th:src="@{/resources/lib/ext4/locale/ext-lang-zh_CN.js}"></script>
+    <script th:src="@{/resources/console/js/component/Common.js}"></script>
+    <script th:src="@{/resources/console/js/index.js}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+body {
+	background: rgb(21, 127, 204);
+	font: 12px Arial, Helevetica, sans-serif;
+}
+
+div.login {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -150px 0 0 -135px;
+	width: 270px;
+	padding: 0;
+	color: #000;
+}
+
+div.login div.top {
+	height: 20px;
+	background: transparent url('../images/bg-login_top.png')
+		no-repeat;
+	color: inherit;
+}
+
+div.login div.wrap {
+	margin: 0;
+	padding: 5px 35px 5px 0;
+	background: transparent url('../images/bg-login_box.png')
+		repeat-y;
+	color: inherit;
+}
+
+div.login div.bottom {
+	height: 20px;
+	background: transparent url('../images/bg-login_bottom.png')
+		no-repeat;
+	color: inherit;
+}
+
+div.login p {
+	margin: 6px 0 12px 0;
+	padding-left: 30px;
+}
+
+div.login span {
+	height: 30px;
+	line-height: 30px;
+	padding-left: 30px;
+	display: block;
+}
+
+div.login h1 {
+	margin-top: 0;
+}
+
+input.btn {
+	display: block;
+	width: 76px;
+	height: 23px;
+	line-height: 23px;
+	border: none;
+	background: #fff url('../images/bg-btn.png') no-repeat;
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	cursor: pointer;
+}
+
+input.btn {
+	display: inline;
+	margin: 5px 0;
+	padding-bottom: 2px;
+}
+
+input.txt {
+	width: 135px;
+	border: 1px solid #ccc;
+}
+
+input.txt1 {
+	width: 75px;
+	border: 1px solid #ccc;
+}
+
+h1 {
+	margin: 10px 0;
+	font-size: 1.6em;
+	text-align: center;
+}
+
+form {
+	margin: 0;
+}
+
+label {
+	cursor: pointer;
+}

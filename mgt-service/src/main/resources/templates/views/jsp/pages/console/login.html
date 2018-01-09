@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>系统登录</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" type="text/css" th:href="@{/resources/console/css/login.css}" />
+</head>
+<body>
+	<div class="login">
+		<div class="top">&nbsp;</div>
+		<form id="loginForm" name="loginForm" method="post" action="" target="_top" onsubmit="return checkForm(this);">
+			<div class="wrap">
+				<p>
+					<font color="red">
+                        <th:block th:if="${shiroLoginFailure=='org.apache.shiro.authc.UnknownAccountException'}">账号不存在</th:block>
+                        <th:block th:if="${shiroLoginFailure=='org.apache.shiro.authc.DisabledAccountException'}">账号不可用</th:block>
+                        <th:block th:if="${shiroLoginFailure=='org.apache.shiro.authc.IncorrectCredentialsException'}">账号密码不正确</th:block>
+                    </font>
+				</p>
+				<span> 
+					<label style="width:3em;">用户名</label>：<input type="text" name="username" id="username" maxlength="50" class="txt" value="" />
+				</span> 
+				<span>
+					<label style="letter-spacing:1em;margin-right:-1em;">密码</label>：<input type="password" name="password" id="password" maxlength="50" class="txt" />
+				</span>
+				<p></p>
+				<p>
+					<input type="submit" name="login" value="登录" class="btn" style="margin-left: 18px;" />&nbsp; 
+					<input type="reset" name="reset" value="重置" class="btn" />
+				</p>
+			</div>
+		</form>
+		<div class="bottom">&nbsp;</div>
+	</div>
+
+	<script th:src="@{/resources/lib/jquery-1.11.1.min.js}"></script>
+	<script th:src="@{/resources/console/js/login.js}"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+#header {
+	height:100%;
+}
+
+#logoDiv {
+	position: relative ;
+	left: 30px;
+	top:15px;
+	width:176px;
+	height:50px;
+	float:left;
+}
+#logo{
+	width:176px;
+	height:50px;
+}
+#titleDiv{
+	float:left;
+	margin-left:40px;
+	font-size: 2.0em;
+	font-weight: bold;
+	color: #006699;
+	height:65px;
+	line-height:65px;
+}
+
+#avatarDiv{
+	float:right;
+	height:65px;
+	width:65px;
+	margin-right: 7px;
+}
+
+#avatarImg{
+	width:50px;
+	height:50px;
+	border-radius:50%;
+	margin-top:7.5px;
+}
+
+#welcomeDiv{
+	float:right;
+	margin-right: 7px;
+	margin-top: 45px;
+}
+#menuDiv{
+	float:right;
+	margin-right: 20px;
+	margin-top: 45px;
+}
+
+#userNameSpan .left {
+	font-size: 1.0em;
+	font-weight: bold;
+	color: #006699;
+}
+
+#userNameSpan .right {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #006699;
+	padding-right: 15px;
+}
+
+#groupNameSpan .left {
+	font-size: 1.0em;
+	font-weight: bold;
+	color: #006699;
+}
+
+#groupNameSpan .right {
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #006699;
+}
+
+#loading-mask{
+        background-color:white;
+        height:100%;
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        z-index:20000;
+    }
+    #loading{
+        height:auto;
+        position:absolute;
+        left:45%;
+        top:40%;
+        padding:2px;
+        z-index:20001;
+    }
+    #loading a {
+        color:#225588;
+    }
+    #loading .loading-indicator{
+        background:white;
+        color:#444;
+        font:bold 13px Helvetica, Arial, sans-serif;
+        height:auto;
+        margin:0;
+        padding:10px;
+        height:32px;
+        line-height:32px;
+    }
+    #loading-msg {
+        font-size: 10px;
+        font-weight: normal;
+    }
