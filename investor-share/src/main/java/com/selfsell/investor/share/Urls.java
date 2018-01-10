@@ -37,4 +37,24 @@ public class Urls {
 	 * app欢迎页管理列表
 	 */
 	public static final String APP_BANNER_LIST = "/app/banner/list";
+	/**
+	 * app banner新增
+	 */
+	public static final String APP_BANNER_ADD = "/app/banner/add";
+	/**
+	 * app banner删除
+	 */
+	public static final String APP_BANNER_DEL = "/app/banner/del";
+	/**
+	 * 更新状态
+	 */
+	public static final String APP_BANNER_UPDATE_STATUS = "/app/banner/updateStatus";
+	/**
+	 * 更新
+	 */
+	public static final String APP_BANNER_UPDATE = "/app/banner/update";
+	/**
+	 * 获取app 欢迎页
+	 */
+	public static final String APP_BANNER = "/app/banner";
 }

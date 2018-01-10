@@ -38,4 +38,8 @@ public class I18nServiceImpl implements I18nService {
 	public String getMessage(I18nMessageCode code, Object[] args, Locale locale) {
 		return messageSource.getMessage(code.name(), args, locale);
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(Locale.ENGLISH.getLanguage());
+	}
 }
