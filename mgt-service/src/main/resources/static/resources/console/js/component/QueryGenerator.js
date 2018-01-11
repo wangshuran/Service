@@ -41,6 +41,7 @@ Ext.define('SystemConsole.component.QueryGenerator', {
 						align : 'center'
 					},
 					items : [ me.createQueryPanel({}) ]
+
 				});
 			}
 			items.push(me.createGridPanel({
@@ -157,19 +158,38 @@ Ext.define('SystemConsole.component.QueryGenerator', {
 
 		if (me.query.queryItems != null && me.query.queryItems.length > 0) {
 			Ext.each(me.query.queryItems, function(item) {
-				items.push({
-					columnWidth : 1 / me.query.config.queryColumns,
-					layout : 'form',
-					border : false,
-					frame : false,
-					items : [ {
-						xtype : 'textfield',
-						name : item.field,
-						fieldLabel : item.label,
-						labelAlign : 'right',
-						labelWidth : 70
-					} ]
-				});
+				var config = Ext.decode(item.config ? item.config : "{}");
+				if(config.wordbook){
+					items.push({
+						columnWidth : 1 / me.query.config.queryColumns,
+						layout : 'form',
+						border : false,
+						frame : false,
+						items : [Ext.create(
+								'SystemConsole.component.WordBookComboBox',
+								{
+									fieldLabel : item.label,
+									labelAlign:'right',
+									name : item.field,
+									wordBook : config.wordbook,
+									labelWidth : 70
+								})]
+					});
+				}else{
+					items.push({
+						columnWidth : 1 / me.query.config.queryColumns,
+						layout : 'form',
+						border : false,
+						frame : false,
+						items : [ {
+							xtype : 'textfield',
+							name : item.field,
+							fieldLabel : item.label,
+							labelAlign : 'right',
+							labelWidth : 70
+						} ]
+					});
+				}
 			});
 		}
 
@@ -258,11 +278,9 @@ Ext.define('SystemConsole.component.QueryGenerator', {
 				},
 				listeners : {
 					exception : function(proxy, response, operation) {
-						var responseText = response.responseText;
-						var responseJson = Ext.decode(responseText);
 						Ext.MessageBox.show({
 							title : 'REMOTE EXCEPTION',
-							msg : responseJson.message,
+							msg : operation.getError().statusText,
 							icon : Ext.MessageBox.ERROR,
 							buttons : Ext.Msg.OK
 						});

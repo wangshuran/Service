@@ -1,6 +1,7 @@
 package com.selfsell.investor.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +59,6 @@ public class AppBannerController {
 	
 	@RequestMapping(value = Urls.APP_BANNER)
 	ResultMap appBanner(@RequestBody AppBannerREQ appBannerREQ) {
-
-		return ResultMap.successResult(appBannerService.appBanner(appBannerREQ));
+		return ResultMap.successResult(appBannerService.appBanner(appBannerREQ,LocaleContextHolder.getLocale().getLanguage()));
 	}
 }

@@ -51,7 +51,7 @@ Ext.define('App.banner.AppBannerEditWindow', {
 						} ]
 					},
 					{
-						columnWidth : .83,
+						columnWidth : .845,
 						layout : 'anchor',
 						items : [ {
 							xtype : 'textfield',
@@ -63,7 +63,7 @@ Ext.define('App.banner.AppBannerEditWindow', {
 						} ]
 					},
 					{
-						columnWidth : .17,
+						columnWidth : .155,
 						layout : 'anchor',
 						items : [ {
 							xtype : 'button',

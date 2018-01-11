@@ -12,6 +12,7 @@ public class AppBannerListREQ implements Serializable {
 
 	private String title;
 	private String status;
+	private String lang;
 
 	public Integer getPage() {
 		return page;
@@ -43,5 +44,13 @@ public class AppBannerListREQ implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 }

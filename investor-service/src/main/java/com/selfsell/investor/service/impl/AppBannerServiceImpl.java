@@ -41,6 +41,9 @@ public class AppBannerServiceImpl implements AppBannerService {
 		if (!StringUtils.isEmpty(appBannerListREQ.getStatus())) {
 			param.andEqualTo("status", appBannerListREQ.getStatus());
 		}
+		if(!StringUtils.isEmpty(appBannerListREQ.getLang())) {
+			param.andEqualTo("lang", appBannerListREQ.getLang());
+		}
 
 		example.orderBy("status").desc().orderBy("weight").asc();
 		PageHelper.startPage(appBannerListREQ.getPage() - 1, appBannerListREQ.getLimit(), true);
@@ -51,7 +54,7 @@ public class AppBannerServiceImpl implements AppBannerService {
 	}
 
 	@Override
-	@CacheEvict(value="appBanner",key="'APP::BANNER'")
+	@CacheEvict(value="appBanner",allEntries=true)
 	public void add(AppBannerBean appBannerBean) {
 		AppBanner appBanner = new AppBanner();
 		BeanUtils.copyProperties(appBannerBean, appBanner, "id");
@@ -61,7 +64,7 @@ public class AppBannerServiceImpl implements AppBannerService {
 	}
 
 	@Override
-	@CacheEvict(value="appBanner",key="'APP::BANNER'")
+	@CacheEvict(value="appBanner",allEntries=true)
 	public void del(Long id) {
 
 		appBannerMapper.deleteByPrimaryKey(id);
@@ -69,7 +72,7 @@ public class AppBannerServiceImpl implements AppBannerService {
 	}
 
 	@Override
-	@CacheEvict(value="appBanner",key="'APP::BANNER'")
+	@CacheEvict(value="appBanner",allEntries=true)
 	public void update(AppBannerBean appBannerBean) {
 		AppBanner appBanner = new AppBanner();
 		BeanUtils.copyProperties(appBannerBean, appBanner);
@@ -80,7 +83,7 @@ public class AppBannerServiceImpl implements AppBannerService {
 	}
 
 	@Override
-	@CacheEvict(value="appBanner",key="'APP::BANNER'")
+	@CacheEvict(value="appBanner",allEntries=true)
 	public void updateStatus(AppBannerBean appBannerBean) {
 		CheckParamUtil.checkBoolean(appBannerBean.getId() == null, "id为空");
 		CheckParamUtil.checkEmpty(appBannerBean.getStatus(), "状态为空");
@@ -88,11 +91,11 @@ public class AppBannerServiceImpl implements AppBannerService {
 		appBannerMapper.updateStatus(appBannerBean.getId(), appBannerBean.getStatus());
 	}
 
-	@Cacheable(value="appBanner",key="'APP::BANNER'")
+	@Cacheable(value="appBanner",key="'APP::BANNER'+#lang")
 	@Override
-	public List<AppBannerRES> appBanner(AppBannerREQ appBannerREQ) {
+	public List<AppBannerRES> appBanner(AppBannerREQ appBannerREQ,String lang) {
 		Example param = new Example(AppBanner.class);
-		param.createCriteria().andEqualTo("status", WBbannerStatus.ENABLED.name());
+		param.createCriteria().andEqualTo("status", WBbannerStatus.ENABLED.name()).andEqualTo("lang",lang);
 		param.orderBy("weight").asc();
 
 		List<AppBanner> resultList = appBannerMapper.selectByExample(param);

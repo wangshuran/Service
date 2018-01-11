@@ -35,6 +35,15 @@ Ext.define('SystemConsole.query.QueryItemGridPanel', {
 			iconCls: 'add',
 			handler: me.showAddQueryItemView
 		}];
+		this.viewConfig={  
+	            plugins: {  
+	                ptype: "gridviewdragdrop",  
+	                dragText: "可用鼠标拖拽进行上下排序"  
+	            },
+	            listeners:{
+	    			drop:me.drop
+	            }
+	        };
 		this.listeners = {
 			itemcontextmenu: this.showQueryItemGridContextMenu
 		};
@@ -168,5 +177,36 @@ Ext.define('SystemConsole.query.QueryItemGridPanel', {
 		//加载数据
 		form.loadRecord(record);
 
+	},
+	drop:function( node, data, overModel, dropPosition, eOpts ){
+		Ext.MessageBox.wait('数据处理中...');
+		var me  = this;
+		var data=[];
+		me.store.each(function(item,i){
+			console.log(item);
+			var record = {};
+			record['id']=item.data.id;
+			record['weight']=i;
+			data.push(record);
+		});
+		
+		Ext.Ajax.request({
+			url : context + '/query/item/sort',
+			params : Ext.encode(data),
+			headers: {
+                 'Content-Type': 'application/json'
+            },
+			method : 'POST',
+			success : function(response) {
+				var text = response.responseText;
+				var json = Ext.JSON.decode(text);
+				if (json.success) {
+					Ext.MessageBox.hide();
+				} else {
+					Ext.MessageBox
+							.alert('提示', '排序失败:' + json.message);
+				}
+			}
+		});
 	}
 });

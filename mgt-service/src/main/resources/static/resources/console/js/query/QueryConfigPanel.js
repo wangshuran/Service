@@ -226,7 +226,7 @@ Ext.define('SystemConsole.query.QueryConfigPanel', {
 							items: [{
 								xtype: 'textfield',
 								name: 'fetchDataUrl',
-								anchor: '97.5%',
+								anchor: '95%',
 								fieldLabel: '数据链接'
 							}]
 
@@ -264,7 +264,7 @@ Ext.define('SystemConsole.query.QueryConfigPanel', {
 				queryId: me.queryId
 			}), Ext.create('SystemConsole.query.QueryResultGridPanel', {
 				title: '显示字段列表',
-				height: 200,
+				height: 400,
 				border: true,
 				queryId: me.queryId,
 				style:'margin-top:10px;'

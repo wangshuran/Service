@@ -27,6 +27,6 @@ public interface AppBannerService {
 
 	void updateStatus(AppBannerBean appBannerBean);
 
-	List<AppBannerRES> appBanner(AppBannerREQ appBannerREQ);
+	List<AppBannerRES> appBanner(AppBannerREQ appBannerREQ,String lang);
 
 }
