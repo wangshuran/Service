@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.selfsell.investor.share.WBbannerStatus;
+import com.selfsell.investor.share.WBrecordStatus;
 import com.selfsell.investor.share.WBlang;
 
 @Table(name = "app_banner")
@@ -22,7 +22,7 @@ public class AppBanner implements Serializable {
 	private String title;// 标题
 	private String subTitle;// 子标题
 	private Integer weight;// 权重
-	private WBbannerStatus status;// 状态
+	private WBrecordStatus status;// 状态
 	private WBlang lang;//多语言
 	public Long getId() {
 		return id;
@@ -64,11 +64,11 @@ public class AppBanner implements Serializable {
 		this.weight = weight;
 	}
 
-	public WBbannerStatus getStatus() {
+	public WBrecordStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(WBbannerStatus status) {
+	public void setStatus(WBrecordStatus status) {
 		this.status = status;
 	}
 

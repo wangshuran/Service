@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.breeze.bms.mgt.bean.ResultMap;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
+import com.selfsell.investor.share.FundPlanBean;
 
 public interface InvestorService {
 
@@ -36,5 +37,12 @@ public interface InvestorService {
 	ResultMap updateStatus(AppBannerBean appBannerBean);
 
 	ResultMap appBannerUpdate(MultipartFile file, AppBannerBean appBannerBean);
+
+	/**
+	 * 资金计划
+	 * @param fundPlanBean
+	 * @return
+	 */
+	ResultMap fundPlanList(FundPlanBean fundPlanBean);
 
 }

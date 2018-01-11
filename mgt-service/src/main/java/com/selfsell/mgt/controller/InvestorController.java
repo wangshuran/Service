@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.breeze.bms.mgt.bean.ResultMap;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
+import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.mgt.service.InvestorService;
 
 /**
@@ -49,6 +50,11 @@ public class InvestorController {
 	@RequestMapping(value = "appBannerUpdateStatus")
 	public ResultMap updateStatus(@ModelAttribute AppBannerBean appBannerBean) {
 		return investorService.updateStatus(appBannerBean);
+	}
+	
+	@RequestMapping(value = "fundPlanList")
+	public ResultMap fundPlanList(@ModelAttribute FundPlanBean fundPlanBean) {
+		return investorService.fundPlanList(fundPlanBean);
 	}
 
 }

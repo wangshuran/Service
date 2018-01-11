@@ -8,7 +8,7 @@ package com.selfsell.investor.share;
  * @author Breeze
  *
  */
-public enum WBbannerStatus {
+public enum WBrecordStatus {
 
 	/**
 	 * ENABLED:启用
@@ -24,7 +24,7 @@ public enum WBbannerStatus {
 	 */
 	private String display;
 	
-	WBbannerStatus(String display) {
+	WBrecordStatus(String display) {
 		this.display = display;
 	}
 	

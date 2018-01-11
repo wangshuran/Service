@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.breeze.bms.mgt.bean.ResultMap;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
+import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.mgt.client.InvestorClient;
 import com.selfsell.mgt.service.FileSystemService;
 import com.selfsell.mgt.service.InvestorService;
@@ -61,5 +62,10 @@ public class InvestorServiceImpl implements InvestorService {
 			appBannerBean.setImgUrl(imgUrl);
 
 		return investorClient.appBannerUpdate(appBannerBean);
+	}
+
+	@Override
+	public ResultMap fundPlanList(FundPlanBean fundPlanBean) {
+		return investorClient.fundPlanList(fundPlanBean);
 	}
 }

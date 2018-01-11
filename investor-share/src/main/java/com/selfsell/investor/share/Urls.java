@@ -57,4 +57,24 @@ public class Urls {
 	 * 获取app 欢迎页
 	 */
 	public static final String APP_BANNER = "/app/banner";
+	/**
+	 * 资金计划列表
+	 */
+	public static final String FUND_PLAN_LIST = "/fund/plan/list";
+	/**
+	 * 资金计划新增
+	 */
+	public static final String FUND_PLAN_ADD = "/fund/plan/add";
+	/**
+	 * 资金计划更新
+	 */
+	public static final String FUND_PLAN_UPDATE = "/fund/plan/update";
+	/**
+	 * 更新状态
+	 */
+	public static final String FUND_PLAN_UPDATE_STATUS = "/fund/plan/updateStatus";
+	/**
+	 * 删除资金计划
+	 */
+	public static final String FUND_PLAN_DEL = "/fund/plan/del";
 }

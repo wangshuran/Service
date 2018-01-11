@@ -20,7 +20,7 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.AppBannerREQ;
 import com.selfsell.investor.share.AppBannerRES;
-import com.selfsell.investor.share.WBbannerStatus;
+import com.selfsell.investor.share.WBrecordStatus;
 import com.selfsell.investor.share.WBlang;
 
 import tk.mybatis.mapper.entity.Example;
@@ -58,7 +58,7 @@ public class AppBannerServiceImpl implements AppBannerService {
 	public void add(AppBannerBean appBannerBean) {
 		AppBanner appBanner = new AppBanner();
 		BeanUtils.copyProperties(appBannerBean, appBanner, "id");
-		appBanner.setStatus(WBbannerStatus.valueOf(appBannerBean.getStatus()));
+		appBanner.setStatus(WBrecordStatus.valueOf(appBannerBean.getStatus()));
 		appBanner.setLang(WBlang.valueOf(appBannerBean.getLang()));
 		appBannerMapper.insert(appBanner);
 	}
@@ -77,7 +77,7 @@ public class AppBannerServiceImpl implements AppBannerService {
 		AppBanner appBanner = new AppBanner();
 		BeanUtils.copyProperties(appBannerBean, appBanner);
 
-		appBanner.setStatus(WBbannerStatus.valueOf(appBannerBean.getStatus()));
+		appBanner.setStatus(WBrecordStatus.valueOf(appBannerBean.getStatus()));
 		appBanner.setLang(WBlang.valueOf(appBannerBean.getLang()));
 		appBannerMapper.updateByPrimaryKey(appBanner);
 	}
@@ -95,7 +95,7 @@ public class AppBannerServiceImpl implements AppBannerService {
 	@Override
 	public List<AppBannerRES> appBanner(AppBannerREQ appBannerREQ,String lang) {
 		Example param = new Example(AppBanner.class);
-		param.createCriteria().andEqualTo("status", WBbannerStatus.ENABLED.name()).andEqualTo("lang",lang);
+		param.createCriteria().andEqualTo("status", WBrecordStatus.ENABLED.name()).andEqualTo("lang",lang);
 		param.orderBy("weight").asc();
 
 		List<AppBanner> resultList = appBannerMapper.selectByExample(param);
