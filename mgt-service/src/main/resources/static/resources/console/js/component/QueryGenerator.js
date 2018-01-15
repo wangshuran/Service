@@ -278,9 +278,10 @@ Ext.define('SystemConsole.component.QueryGenerator', {
 				},
 				listeners : {
 					exception : function(proxy, response, operation) {
+						var json = Ext.decode(response.responseText);
 						Ext.MessageBox.show({
 							title : 'REMOTE EXCEPTION',
-							msg : operation.getError().statusText,
+							msg : json.message,
 							icon : Ext.MessageBox.ERROR,
 							buttons : Ext.Msg.OK
 						});

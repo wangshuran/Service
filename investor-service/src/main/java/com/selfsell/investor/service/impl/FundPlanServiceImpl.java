@@ -33,7 +33,6 @@ public class FundPlanServiceImpl implements FundPlanService {
 	public PageInfo<FundPlan> list(FundPlanBean fundPlanBean) {
 
 		Example example = new Example(FundPlan.class);
-		example.orderBy("weight").asc();
 
 		PageHelper.startPage(fundPlanBean.getPage() - 1, fundPlanBean.getLimit(), true);
 		List<FundPlan> resultList = fundPlanMapper.selectByExample(example);
@@ -64,7 +63,7 @@ public class FundPlanServiceImpl implements FundPlanService {
 	@Transactional(rollbackFor = Throwable.class)
 	public void add(FundPlanBean fundPlanBean) {
 		FundPlan fundPlan = new FundPlan();
-		BeanUtils.copyProperties(fundPlanBean, fundPlan);
+		BeanUtils.copyProperties(fundPlanBean, fundPlan, "id");
 		fundPlan.setStatus(WBrecordStatus.valueOf(fundPlanBean.getStatus()));
 		fundPlan.setTermUnit(WBdateUnit.valueOf(fundPlanBean.getTermUnit()));
 
