@@ -11,6 +11,7 @@ import com.breeze.bms.mgt.bean.ResultMap;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
+import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.mgt.service.InvestorService;
 
 /**
@@ -55,6 +56,11 @@ public class InvestorController {
 	@RequestMapping(value = "fundPlanList")
 	public ResultMap fundPlanList(@ModelAttribute FundPlanBean fundPlanBean) {
 		return investorService.fundPlanList(fundPlanBean);
+	}
+	
+	@RequestMapping(value = "fundPlanLangList")
+	public ResultMap fundPlanLangList(@ModelAttribute FundPlanLangBean fundPlanLangBean) {
+		return investorService.fundPlanLangList(fundPlanLangBean);
 	}
 
 }

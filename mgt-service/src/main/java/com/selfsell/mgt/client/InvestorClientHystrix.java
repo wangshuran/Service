@@ -11,6 +11,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
+import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 
 @Service("investorClientHystrix")
 public class InvestorClientHystrix implements InvestorClient {
@@ -77,6 +78,17 @@ public class InvestorClientHystrix implements InvestorClient {
 		return investorClient.fundPlanList(fundPlanBean);
 	}
 	public ResultMap fundPlanFallback(FundPlanBean fundPlanBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "fundPlanLangFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap fundPlanLangList(FundPlanLangBean fundPlanLangBean) {
+		return investorClient.fundPlanLangList(fundPlanLangBean);
+	}
+	public ResultMap fundPlanLangFallback(FundPlanLangBean fundPlanLangBean, Throwable e) {
 		logger.error("investor-service服务调用异常", e);
 		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
 	}

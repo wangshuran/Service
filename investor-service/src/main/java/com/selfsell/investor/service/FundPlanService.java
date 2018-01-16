@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.github.pagehelper.PageInfo;
 import com.selfsell.investor.mybatis.domain.FundPlan;
+import com.selfsell.investor.mybatis.domain.FundPlanLang;
 import com.selfsell.investor.share.FundPlanBean;
+import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 
 /**
  * 资金计划服务
@@ -56,5 +58,12 @@ public interface FundPlanService {
 	 * @param id
 	 */
 	void del(Long id);
+
+	/**
+	 * 多语言列表
+	 * @param fundPlanLangBean
+	 * @return
+	 */
+	List<FundPlanLang> langList(FundPlanLangBean fundPlanLangBean);
 
 }

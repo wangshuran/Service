@@ -77,4 +77,8 @@ public class Urls {
 	 * 删除资金计划
 	 */
 	public static final String FUND_PLAN_DEL = "/fund/plan/del";
+	/**
+	 * 资金计划列表
+	 */
+	public static final String FUND_PLAN_LANG_LIST = "/fund/plan/lang/list";
 }

@@ -13,6 +13,7 @@ import com.selfsell.investor.mybatis.domain.FundPlan;
 import com.selfsell.investor.service.FundPlanService;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.Urls;
+import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 
 @RestController
 public class FundPlanController {
@@ -29,6 +30,12 @@ public class FundPlanController {
 		fundPlanService.fillLang(resultList);
 
 		return ResultMap.successResult().set("totalAmount", fundPlanPage.getTotal()).set("resultList", resultList);
+	}
+	
+	@RequestMapping(value = Urls.FUND_PLAN_LANG_LIST)
+	ResultMap langList(@RequestBody FundPlanLangBean fundPlanLangBean) {
+
+		return ResultMap.successResult().set("resultList", fundPlanService.langList(fundPlanLangBean));
 	}
 
 	@RequestMapping(value = Urls.FUND_PLAN_ADD)

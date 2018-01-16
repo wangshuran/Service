@@ -6,6 +6,7 @@ import com.breeze.bms.mgt.bean.ResultMap;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
+import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 
 public interface InvestorService {
 
@@ -44,5 +45,12 @@ public interface InvestorService {
 	 * @return
 	 */
 	ResultMap fundPlanList(FundPlanBean fundPlanBean);
+
+	/**
+	 * 资金计划多语言
+	 * @param fundPlanLangBean
+	 * @return
+	 */
+	ResultMap fundPlanLangList(FundPlanLangBean fundPlanLangBean);
 
 }

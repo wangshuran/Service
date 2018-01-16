@@ -28,6 +28,7 @@ public class FundPlan implements Serializable {
 	private Integer term;// 期限
 	private WBdateUnit termUnit;// 期限单位
 	private WBrecordStatus status;// 计划状态
+	private Integer weight;//排序
 	
 	@Transient
 	private List<FundPlanLang> fundPlanLangs;
@@ -78,6 +79,14 @@ public class FundPlan implements Serializable {
 
 	public void setStatus(WBrecordStatus status) {
 		this.status = status;
+	}
+
+	public Integer getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Integer weight) {
+		this.weight = weight;
 	}
 
 	public List<FundPlanLang> getFundPlanLangs() {

@@ -21,6 +21,7 @@ import com.selfsell.investor.share.WBlang;
 import com.selfsell.investor.share.WBrecordStatus;
 
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Component
 public class FundPlanServiceImpl implements FundPlanService {
@@ -97,5 +98,16 @@ public class FundPlanServiceImpl implements FundPlanService {
 	public void del(Long id) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<FundPlanLang> langList(FundPlanLangBean fundPlanLangBean) {
+		Example example = new Example(FundPlanLang.class);
+		Criteria param = example.createCriteria();
+		if(fundPlanLangBean.getFundPlanId()!=null) {
+			param.andEqualTo("fundPlanId",fundPlanLangBean.getFundPlanId());
+		}
+		
+		return fundPlanLangMapper.selectByExample(param);
 	}
 }

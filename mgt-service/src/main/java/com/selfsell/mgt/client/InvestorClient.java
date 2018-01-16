@@ -7,6 +7,7 @@ import com.breeze.bms.mgt.bean.ResultMap;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
+import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.Urls;
 
 @FeignClient(name = "investor-service")
@@ -23,4 +24,6 @@ public interface InvestorClient {
 	public ResultMap appBannerUpdate(AppBannerBean appBannerBean);
 	@RequestMapping(value = Urls.FUND_PLAN_LIST)
 	public ResultMap fundPlanList(FundPlanBean fundPlanBean);
+	@RequestMapping(value = Urls.FUND_PLAN_LANG_LIST)
+	public ResultMap fundPlanLangList(FundPlanLangBean fundPlanLangBean);
 }
