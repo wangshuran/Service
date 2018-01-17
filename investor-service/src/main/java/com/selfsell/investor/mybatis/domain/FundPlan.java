@@ -32,6 +32,10 @@ public class FundPlan implements Serializable {
 	
 	@Transient
 	private List<FundPlanLang> fundPlanLangs;
+	@Transient
+	private String title;
+	@Transient
+	private String remark;
 
 	public Long getId() {
 		return id;
@@ -95,6 +99,22 @@ public class FundPlan implements Serializable {
 
 	public void setFundPlanLangs(List<FundPlanLang> fundPlanLangs) {
 		this.fundPlanLangs = fundPlanLangs;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 }

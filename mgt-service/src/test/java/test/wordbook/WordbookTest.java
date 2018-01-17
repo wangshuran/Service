@@ -29,7 +29,7 @@ public class WordbookTest {
 
 	@Test
 	public void genWordbook() throws Exception {
-		String wordbookKey = "dateUnit";
+		String wordbookKey = "inout";
 		String filePath = "D:\\test";
 
 		

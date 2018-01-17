@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.selfsell.common.bean.ResultMap;
 import com.selfsell.investor.service.InvestorService;
 import com.selfsell.investor.service.InviteService;
+import com.selfsell.investor.service.TradeService;
+import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorLoginREQ;
@@ -15,6 +17,7 @@ import com.selfsell.investor.share.InvestorRegisterREQ;
 import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InviteInfoREQ;
 import com.selfsell.investor.share.ModifyPasswordREQ;
+import com.selfsell.investor.share.TradeInfoREQ;
 import com.selfsell.investor.share.Urls;
 
 @RestController
@@ -25,6 +28,9 @@ public class InvestorController {
 	
 	@Autowired
 	InviteService inviteService;
+	
+	@Autowired
+	TradeService tradeService;
 
 	@RequestMapping(value = Urls.INVESTOR_REGISTER)
 	ResultMap register(@RequestBody InvestorRegisterREQ investorRegisterREQ) {
@@ -63,5 +69,15 @@ public class InvestorController {
 	ResultMap modifyPassword(@RequestBody ModifyPasswordREQ modifyPasswordREQ) {
 		investorService.modifyPassword(modifyPasswordREQ);
 		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.FUND_INFO)
+	ResultMap fundInfo(@RequestBody FundInfoREQ fundInfoREQ) {
+		return ResultMap.successResult(investorService.fundInfo(fundInfoREQ));
+	}
+	
+	@RequestMapping(value = Urls.TRADE_INFO)
+	ResultMap tradeInfo(@RequestBody TradeInfoREQ tradeInfoREQ) {
+		return ResultMap.successResult(tradeService.tradeInfo(tradeInfoREQ));
 	}
 }

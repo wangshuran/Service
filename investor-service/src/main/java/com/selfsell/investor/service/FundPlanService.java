@@ -7,6 +7,8 @@ import com.selfsell.investor.mybatis.domain.FundPlan;
 import com.selfsell.investor.mybatis.domain.FundPlanLang;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.FundPlanREQ;
+import com.selfsell.investor.share.FundPlanRES;
 
 /**
  * 资金计划服务
@@ -61,9 +63,26 @@ public interface FundPlanService {
 
 	/**
 	 * 多语言列表
+	 * 
 	 * @param fundPlanLangBean
 	 * @return
 	 */
 	List<FundPlanLang> langList(FundPlanLangBean fundPlanLangBean);
+
+	/**
+	 * 查询资金计划
+	 * 
+	 * @param fundPlanId
+	 * @param language
+	 * @return
+	 */
+	FundPlan queryByIdAndLang(Long fundPlanId, String language);
+
+	/**
+	 * 资金计划
+	 * @param fundPlanREQ
+	 * @return
+	 */
+	List<FundPlanRES> fundPlan(FundPlanREQ fundPlanREQ);
 
 }

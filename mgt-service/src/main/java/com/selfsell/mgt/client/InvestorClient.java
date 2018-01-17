@@ -26,4 +26,12 @@ public interface InvestorClient {
 	public ResultMap fundPlanList(FundPlanBean fundPlanBean);
 	@RequestMapping(value = Urls.FUND_PLAN_LANG_LIST)
 	public ResultMap fundPlanLangList(FundPlanLangBean fundPlanLangBean);
+	@RequestMapping(value = Urls.FUND_PLAN_ADD)
+	public ResultMap fundPlanAdd(FundPlanBean fundPlanBean);
+	@RequestMapping(value = Urls.FUND_PLAN_UPDATE)
+	public ResultMap fundPlanUpdate(FundPlanBean fundPlanBean);
+	@RequestMapping(value = Urls.FUND_PLAN_DEL)
+	public ResultMap fundPlanDel(Long id);
+	@RequestMapping(value = Urls.FUND_PLAN_UPDATE_STATUS)
+	public ResultMap fundPlanUpdateStatus(FundPlanBean fundPlanBean);
 }

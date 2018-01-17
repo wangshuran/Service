@@ -53,4 +53,12 @@ public interface InvestorService {
 	 */
 	ResultMap fundPlanLangList(FundPlanLangBean fundPlanLangBean);
 
+	ResultMap fundPlanAdd(FundPlanBean fundPlanBean,MultipartFile file);
+
+	ResultMap fundPlanUpdate(FundPlanBean fundPlanBean,MultipartFile file);
+
+	ResultMap fundPlanDel(Long id);
+
+	ResultMap fundPlanUpdateStatus(FundPlanBean fundPlanBean);
+
 }

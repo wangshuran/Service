@@ -81,4 +81,16 @@ public class Urls {
 	 * 资金计划列表
 	 */
 	public static final String FUND_PLAN_LANG_LIST = "/fund/plan/lang/list";
+	/**
+	 * 资金情况
+	 */
+	public static final String FUND_INFO = "/fund/info";
+	/**
+	 * 资金计划
+	 */
+	public static final String FUND_PLAN = "/fund/plan";
+	/**
+	 * 交易信息
+	 */
+	public static final String TRADE_INFO = "/trade/info";
 }

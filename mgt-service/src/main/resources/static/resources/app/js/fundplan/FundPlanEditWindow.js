@@ -17,7 +17,7 @@ Ext.define('App.fundplan.FundPlanEditWindow', {
 			bodyStyle : 'padding:10px',
 			items : [
 				{
-					columnWidth : .845,
+					columnWidth : .868,
 					layout : 'anchor',
 					items : [ {
 						xtype : 'textfield',
@@ -29,7 +29,7 @@ Ext.define('App.fundplan.FundPlanEditWindow', {
 					} ]
 				},
 				{
-					columnWidth : .155,
+					columnWidth : .132,
 					layout : 'anchor',
 					items : [ {
 						xtype : 'button',
@@ -79,7 +79,8 @@ Ext.define('App.fundplan.FundPlanEditWindow', {
 								flex:1
 							},Ext.create(
 									'SystemConsole.component.WordBookComboBox', {
-										name : 'status',
+										name : 'termUnit',
+										editable:false,
 										wordBook : 'dateUnit',
 										flex:1
 									})]
@@ -104,56 +105,21 @@ Ext.define('App.fundplan.FundPlanEditWindow', {
 									fieldLabel : '状态',
 									name : 'status',
 									anchor : '95%',
+									editable:false,
 									wordBook : 'recordStatus'
 								}) ]
-					} ]
+					},
+					{
+						columnWidth : 1,
+						layout : 'anchor',
+						items : [ Ext.create(
+								'App.fundplan.FundPlanLangGrid', {
+									title : '多语言',
+									anchor : '95%',
+									height:200
+								}) ]
+					}]
 		} ];
 		this.callParent(arguments);
-	},
-	createLangGrid:function(){
-		var store = Ext.create('Ext.data.Store', {
-			autoDestroy : true,
-			model : 'model',
-			autoLoad : true,
-			pageSize : me.query.config.pageSize,
-			proxy : {
-				type : 'ajax',
-				actionMethods : 'POST',
-				batchActions : false,
-				extraParams : extraParams,
-				api : {
-					read : dataUrl
-				},
-				reader : {
-					type : 'json',
-					successProperty : 'success',
-					root : 'resultList',
-					totalProperty : 'totalCount'
-				},
-				writer : {
-					type : 'json',
-					writeAllFields : true
-				},
-				listeners : {
-					exception : function(proxy, response, operation) {
-						var json = Ext.decode(response.responseText);
-						Ext.MessageBox.show({
-							title : 'REMOTE EXCEPTION',
-							msg : json.message,
-							icon : Ext.MessageBox.ERROR,
-							buttons : Ext.Msg.OK
-						});
-					}
-				}
-			}
-		});
-		
-		var gridConfig = {
-				columns : columns,
-				store : store,
-				viewConfig:{  
-	                enableTextSelection:true  
-	            }
-			};
 	}
 })

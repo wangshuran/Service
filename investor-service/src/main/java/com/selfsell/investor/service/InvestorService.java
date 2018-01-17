@@ -1,6 +1,8 @@
 package com.selfsell.investor.service;
 
 import com.selfsell.investor.mybatis.domain.Investor;
+import com.selfsell.investor.share.FundInfoREQ;
+import com.selfsell.investor.share.FundInfoRES;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthRES;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthREQ;
@@ -79,4 +81,13 @@ public interface InvestorService {
 	 * @return
 	 */
 	ModifyPasswordRES modifyPassword(ModifyPasswordREQ modifyPasswordREQ);
+
+	/**
+	 * 资金情况
+	 * 
+	 * @param fundInfoREQ
+	 * @return
+	 */
+	FundInfoRES fundInfo(FundInfoREQ fundInfoREQ);
+
 }

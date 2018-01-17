@@ -14,6 +14,7 @@ import com.selfsell.investor.service.FundPlanService;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.Urls;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.FundPlanREQ;
 
 @RestController
 public class FundPlanController {
@@ -68,6 +69,13 @@ public class FundPlanController {
 		fundPlanService.del(id);
 
 		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.FUND_PLAN)
+	ResultMap fundPlan(@RequestBody FundPlanREQ fundPlanREQ) {
+
+		return ResultMap.successResult(fundPlanService.fundPlan(fundPlanREQ));
+		
 	}
 
 }

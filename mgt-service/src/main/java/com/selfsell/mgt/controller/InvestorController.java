@@ -58,6 +58,24 @@ public class InvestorController {
 		return investorService.fundPlanList(fundPlanBean);
 	}
 	
+	@RequestMapping(value = "fundPlanAdd")
+	public ResultMap fundPlanAdd(@ModelAttribute FundPlanBean fundPlanBean,@RequestParam(value = "iconFile") MultipartFile file) {
+		return investorService.fundPlanAdd(fundPlanBean,file);
+	}
+	
+	@RequestMapping(value = "fundPlanUpdate")
+	public ResultMap fundPlanUpdate(@ModelAttribute FundPlanBean fundPlanBean,@RequestParam(value = "iconFile") MultipartFile file) {
+		return investorService.fundPlanUpdate(fundPlanBean,file);
+	}
+	@RequestMapping(value = "fundPlanUpdateStatus")
+	public ResultMap fundPlanUpdateStatus(@ModelAttribute FundPlanBean fundPlanBean) {
+		return investorService.fundPlanUpdateStatus(fundPlanBean);
+	}
+	@RequestMapping(value = "fundPlanDel")
+	public ResultMap fundPlanDel(@RequestParam(value = "id") Long id) {
+		return investorService.fundPlanDel(id);
+	}
+	
 	@RequestMapping(value = "fundPlanLangList")
 	public ResultMap fundPlanLangList(@ModelAttribute FundPlanLangBean fundPlanLangBean) {
 		return investorService.fundPlanLangList(fundPlanLangBean);

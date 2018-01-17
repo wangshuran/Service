@@ -74,4 +74,34 @@ public class InvestorServiceImpl implements InvestorService {
 	public ResultMap fundPlanLangList(FundPlanLangBean fundPlanLangBean) {
 		return investorClient.fundPlanLangList(fundPlanLangBean);
 	}
+
+	@Override
+	public ResultMap fundPlanAdd(FundPlanBean fundPlanBean,MultipartFile file) {
+		String filepath = fileSystemService.save("/image/fundplan", file);
+		String imgUrl = webDomain + "/file/show?path=" + filepath;
+
+		if (!StringUtils.isEmpty(filepath))
+			fundPlanBean.setIconUrl(imgUrl);
+		return investorClient.fundPlanAdd(fundPlanBean);
+	}
+
+	@Override
+	public ResultMap fundPlanUpdate(FundPlanBean fundPlanBean,MultipartFile file) {
+		String filepath = fileSystemService.save("/image/fundplan", file);
+		String imgUrl = webDomain + "/file/show?path=" + filepath;
+
+		if (!StringUtils.isEmpty(filepath))
+			fundPlanBean.setIconUrl(imgUrl);
+		return investorClient.fundPlanUpdate(fundPlanBean);
+	}
+
+	@Override
+	public ResultMap fundPlanDel(Long id) {
+		return investorClient.fundPlanDel(id);
+	}
+
+	@Override
+	public ResultMap fundPlanUpdateStatus(FundPlanBean fundPlanBean) {
+		return investorClient.fundPlanUpdateStatus(fundPlanBean);
+	}
 }

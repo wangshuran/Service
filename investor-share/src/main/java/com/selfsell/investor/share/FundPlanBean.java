@@ -19,6 +19,7 @@ public class FundPlanBean implements Serializable {
 	private Integer term;
 	private String termUnit;
 	private String status;
+	private Integer weight;
 
 	private List<FundPlanLangBean> fundPlanLangs;
 
@@ -146,5 +147,13 @@ public class FundPlanBean implements Serializable {
 
 	public void setFundPlanLangs(List<FundPlanLangBean> fundPlanLangs) {
 		this.fundPlanLangs = fundPlanLangs;
+	}
+
+	public Integer getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Integer weight) {
+		this.weight = weight;
 	}
 }

@@ -11,29 +11,43 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.selfsell.common.exception.BusinessException;
 import com.selfsell.common.util.CheckParamUtil;
 import com.selfsell.common.util.G;
 import com.selfsell.common.util.QRCodeUtil;
+import com.selfsell.investor.bean.CurrencyType;
 import com.selfsell.investor.bean.GoogleAuthStatus;
 import com.selfsell.investor.bean.I18nMessageCode;
+import com.selfsell.investor.mybatis.domain.FinancialRecord;
+import com.selfsell.investor.mybatis.domain.FundPlan;
 import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.mybatis.domain.InvestorExt;
 import com.selfsell.investor.mybatis.domain.InvestorGoogleAuth;
 import com.selfsell.investor.mybatis.mapper.InvestorExtMapper;
 import com.selfsell.investor.mybatis.mapper.InvestorGoogleAuthMapper;
 import com.selfsell.investor.mybatis.mapper.InvestorMapper;
+import com.selfsell.investor.service.FinancialService;
+import com.selfsell.investor.service.FundPlanService;
 import com.selfsell.investor.service.I18nService;
 import com.selfsell.investor.service.InvestorService;
 import com.selfsell.investor.service.InviteService;
+import com.selfsell.investor.service.TokenPriceService;
+import com.selfsell.investor.service.TradeService;
 import com.selfsell.investor.share.Constants;
+import com.selfsell.investor.share.FundInfoREQ;
+import com.selfsell.investor.share.FundInfoRES;
+import com.selfsell.investor.share.FundInfoRES.ElementFundDetail;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthRES;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthREQ;
@@ -79,6 +93,19 @@ public class InvestorServiceImpl implements InvestorService {
 
 	@Autowired
 	InvestorGoogleAuthMapper investorGoogleAuthMapper;
+
+	@Autowired
+	@Qualifier("tokenPriceServiceOkex")
+	TokenPriceService tokenPriceService;
+
+	@Autowired
+	FinancialService financialService;
+
+	@Autowired
+	FundPlanService fundPlanService;
+	
+	@Autowired
+	TradeService tradeService;
 
 	@Override
 	@Transactional(rollbackFor = Throwable.class)
@@ -357,5 +384,55 @@ public class InvestorServiceImpl implements InvestorService {
 
 		return new ModifyPasswordRES();
 	}
+
+	@Override
+	public FundInfoRES fundInfo(FundInfoREQ fundInfoREQ) {
+		// 参数验证
+		CheckParamUtil.checkBoolean(fundInfoREQ.getId() == null, i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		Investor investor = queryById(fundInfoREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, fundInfoREQ.getId()));
+		}
+
+		FundInfoRES result = new FundInfoRES();
+		// 汇总信息
+		InvestorExt investorExt = investorExtMapper.selectByPrimaryKey(fundInfoREQ.getId());
+		result.setTotalSSC(investorExt.getTotalSSC());
+		result.setAvailableSSC(investorExt.getAvailableSSC());
+		BigDecimal tokenPrice = BigDecimal.ZERO;
+		if (LocaleContextHolder.getLocale().getLanguage().equals("zh")) {
+			tokenPrice = tokenPriceService.queryPrice("ssc", CurrencyType.CNY);
+		} else {
+			tokenPrice = tokenPriceService.queryPrice("ssc", CurrencyType.USD);
+		}
+		result.setTotalPrice(tokenPrice.multiply(result.getTotalSSC()));
+
+		// 理财详情
+		List<FinancialRecord> financialRecords = financialService.queryInvestorFinancialRecords(investor.getId());
+		if (financialRecords != null && !financialRecords.isEmpty()) {
+			List<ElementFundDetail> fundDetails = Lists.transform(financialRecords,
+					new Function<FinancialRecord, ElementFundDetail>() {
+
+						@Override
+						public ElementFundDetail apply(FinancialRecord input) {
+							ElementFundDetail fundDetail = new ElementFundDetail();
+							fundDetail.setPlanId(input.getFundPlanId());
+							FundPlan fundPlan = fundPlanService.queryByIdAndLang(input.getFundPlanId(),
+									LocaleContextHolder.getLocale().getLanguage());
+							fundDetail.setPlanIconUrl(fundPlan.getIconUrl());
+							fundDetail.setPlanTitle(fundPlan.getTitle());
+							fundDetail.setAmount(input.getAmount());
+							fundDetail.setInterest(input.getInterest());
+							return fundDetail;
+						}
+					});
+
+			result.setFundDetail(fundDetails);
+		}
+
+		return result;
+	}
+
 
 }

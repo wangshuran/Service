@@ -92,4 +92,36 @@ public class InvestorClientHystrix implements InvestorClient {
 		logger.error("investor-service服务调用异常", e);
 		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
 	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "fundPlanFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap fundPlanAdd(FundPlanBean fundPlanBean) {
+		return investorClient.fundPlanAdd(fundPlanBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "fundPlanFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap fundPlanUpdate(FundPlanBean fundPlanBean) {
+		return investorClient.fundPlanUpdate(fundPlanBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "fundPlanDelFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap fundPlanDel(Long id) {
+		return investorClient.fundPlanDel(id);
+	}
+	public ResultMap fundPlanDelFallback(Long id, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "fundPlanFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap fundPlanUpdateStatus(FundPlanBean fundPlanBean) {
+		return investorClient.fundPlanUpdateStatus(fundPlanBean);
+	}
 }

@@ -3,6 +3,7 @@ package com.selfsell.investor.mybatis.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -25,6 +26,10 @@ public class InvestorExt implements Serializable {
 	private String email;
 	private Integer inviteNum;// 邀请人数
 	private BigDecimal inviteReward;// 邀请奖励数
+	@Column(name = "total_ssc")
+	private BigDecimal totalSSC;// 总资产
+	@Column(name = "available_ssc")
+	private BigDecimal availableSSC;// 可用SSC
 
 	public Long getUserId() {
 		return userId;
@@ -56,6 +61,22 @@ public class InvestorExt implements Serializable {
 
 	public void setInviteReward(BigDecimal inviteReward) {
 		this.inviteReward = inviteReward;
+	}
+
+	public BigDecimal getTotalSSC() {
+		return totalSSC;
+	}
+
+	public void setTotalSSC(BigDecimal totalSSC) {
+		this.totalSSC = totalSSC;
+	}
+
+	public BigDecimal getAvailableSSC() {
+		return availableSSC;
+	}
+
+	public void setAvailableSSC(BigDecimal availableSSC) {
+		this.availableSSC = availableSSC;
 	}
 
 }
