@@ -1,5 +1,7 @@
 package com.selfsell.investor.service;
 
+import java.math.BigDecimal;
+
 import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.FundInfoRES;
@@ -15,6 +17,7 @@ import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InvestorResetPasswordRES;
 import com.selfsell.investor.share.ModifyPasswordREQ;
 import com.selfsell.investor.share.ModifyPasswordRES;
+import com.selfsell.investor.share.WBinout;
 
 /**
  * 投资人服务
@@ -89,5 +92,22 @@ public interface InvestorService {
 	 * @return
 	 */
 	FundInfoRES fundInfo(FundInfoREQ fundInfoREQ);
+
+	/**
+	 * 通过SSC地址查询
+	 * 
+	 * @param sscAddress
+	 * @return
+	 */
+	Investor queryBySscAddress(String sscAddress);
+
+	/**
+	 * 更新资产
+	 * @param id
+	 * @param inout
+	 * @param amount
+	 * @param real 是否真实交易
+	 */
+	void updateAssets(Long id, WBinout inout, BigDecimal amount,Boolean real);
 
 }

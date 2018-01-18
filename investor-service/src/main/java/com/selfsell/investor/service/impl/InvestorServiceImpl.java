@@ -3,15 +3,18 @@ package com.selfsell.investor.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.redisson.api.RBucket;
+import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +64,7 @@ import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InvestorResetPasswordRES;
 import com.selfsell.investor.share.ModifyPasswordREQ;
 import com.selfsell.investor.share.ModifyPasswordRES;
+import com.selfsell.investor.share.WBinout;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
@@ -103,9 +107,12 @@ public class InvestorServiceImpl implements InvestorService {
 
 	@Autowired
 	FundPlanService fundPlanService;
-	
+
 	@Autowired
 	TradeService tradeService;
+
+	@Value("${act.ssc.address}")
+	String mainSscAddress;// ACT主地址
 
 	@Override
 	@Transactional(rollbackFor = Throwable.class)
@@ -137,6 +144,7 @@ public class InvestorServiceImpl implements InvestorService {
 		user.setPassword(DigestUtils.md5Hex(investorRegisterREQ.getPassword()));
 		user.setCreateTime(new Date());
 		user.setStatus("0");
+		user.setSscAddress(mainSscAddress + Joiner.on("").join(UUID.randomUUID().toString().split("-")));
 		user.setGoogleAuthStatus(GoogleAuthStatus.OFF);
 		investorMapper.insert(user);
 		// 插入扩展数据
@@ -145,6 +153,8 @@ public class InvestorServiceImpl implements InvestorService {
 		investorExt.setEmail(user.getEmail());
 		investorExt.setInviteNum(0);
 		investorExt.setInviteReward(BigDecimal.ZERO);
+		investorExt.setTotalSSC(BigDecimal.ZERO);
+		investorExt.setAvailableSSC(BigDecimal.ZERO);
 		investorExtMapper.insert(investorExt);
 		// 设置邀请码
 		inviteService.setUserInviteCode(user.getId());
@@ -434,5 +444,48 @@ public class InvestorServiceImpl implements InvestorService {
 		return result;
 	}
 
+	@Override
+	public Investor queryBySscAddress(String sscAddress) {
+		Example example = new Example(Investor.class);
+		example.createCriteria().andEqualTo("sscAddress", sscAddress);
+
+		List<Investor> resultList = investorMapper.selectByExample(example);
+		if (resultList != null && !resultList.isEmpty()) {
+			return resultList.get(0);
+		}
+
+		return null;
+	}
+
+	@Override
+	public void updateAssets(Long id, WBinout inout, BigDecimal amount, Boolean real) {
+		RLock lock = redissonClient.getLock(Joiner.on("::").join("UPDATE", "ASSETS", "LOCK", id));
+		lock.lock();
+
+		InvestorExt investorExt = investorExtMapper.selectByPrimaryKey(id);
+		if (investorExt != null) {
+			if (WBinout.OUT.equals(inout)) {
+				BigDecimal result = investorExt.getAvailableSSC().subtract(amount);
+				if (result.compareTo(BigDecimal.ZERO) >= 0) {
+					investorExt.setAvailableSSC(result);
+					if (real) {
+						investorExt.setTotalSSC(investorExt.getTotalSSC().subtract(amount));
+					}
+				} else {
+					throw new BusinessException("账户[{}]金额不足", id);
+				}
+			} else {
+				investorExt.setAvailableSSC(investorExt.getAvailableSSC().add(amount));
+				if (real) {
+					investorExt.setTotalSSC(investorExt.getTotalSSC().add(amount));
+				}
+			}
+
+			investorExtMapper.updateByPrimaryKey(investorExt);
+
+		}
+
+		lock.unlock();
+	}
 
 }

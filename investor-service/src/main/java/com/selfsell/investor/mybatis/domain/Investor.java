@@ -30,6 +30,7 @@ public class Investor implements Serializable {
 	private GoogleAuthStatus googleAuthStatus;// google验证
 	private String inviteCode;// 邀请码
 	private Date createTime;// 注册时间
+	private String sscAddress;//分配ssc地址
 
 	public Long getId() {
 		return id;
@@ -85,6 +86,14 @@ public class Investor implements Serializable {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public String getSscAddress() {
+		return sscAddress;
+	}
+
+	public void setSscAddress(String sscAddress) {
+		this.sscAddress = sscAddress;
 	}
 
 }

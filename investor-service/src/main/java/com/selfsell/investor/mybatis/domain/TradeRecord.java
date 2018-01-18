@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.selfsell.investor.bean.TradeRecordStatus;
+import com.selfsell.investor.bean.TradeType;
 import com.selfsell.investor.share.WBinout;
 
 @Table(name = "trade_record")
@@ -29,6 +31,9 @@ public class TradeRecord implements Serializable {
 	private String tAddress;// 目标地址
 	private WBinout inout;// 收支标识
 	private String remark;// 描述
+	private String txId;// 交易ID
+	private TradeRecordStatus status;
+	private TradeType type;// 交易类型
 
 	public Long getId() {
 		return id;
@@ -92,6 +97,30 @@ public class TradeRecord implements Serializable {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getTxId() {
+		return txId;
+	}
+
+	public void setTxId(String txId) {
+		this.txId = txId;
+	}
+
+	public TradeRecordStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(TradeRecordStatus status) {
+		this.status = status;
+	}
+
+	public TradeType getType() {
+		return type;
+	}
+
+	public void setType(TradeType type) {
+		this.type = type;
 	}
 
 }
