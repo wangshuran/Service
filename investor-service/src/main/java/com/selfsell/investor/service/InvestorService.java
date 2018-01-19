@@ -17,6 +17,10 @@ import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InvestorResetPasswordRES;
 import com.selfsell.investor.share.ModifyPasswordREQ;
 import com.selfsell.investor.share.ModifyPasswordRES;
+import com.selfsell.investor.share.QueryTransferInfoREQ;
+import com.selfsell.investor.share.QueryTransferInfoRES;
+import com.selfsell.investor.share.TransferREQ;
+import com.selfsell.investor.share.TransferRES;
 import com.selfsell.investor.share.WBinout;
 
 /**
@@ -103,11 +107,28 @@ public interface InvestorService {
 
 	/**
 	 * 更新资产
+	 * 
 	 * @param id
 	 * @param inout
 	 * @param amount
-	 * @param real 是否真实交易
+	 * @param real
+	 *            是否真实交易
 	 */
-	void updateAssets(Long id, WBinout inout, BigDecimal amount,Boolean real);
+	void updateAssets(Long id, WBinout inout, BigDecimal amount, Boolean real);
+
+	/**
+	 * 查询个人转账信息
+	 * 
+	 * @param queryTransferInfoREQ
+	 * @return
+	 */
+	QueryTransferInfoRES queryTransferInfo(QueryTransferInfoREQ queryTransferInfoREQ);
+
+	/**
+	 * 转账
+	 * @param transferREQ
+	 * @return
+	 */
+	TransferRES transfer(TransferREQ transferREQ);
 
 }

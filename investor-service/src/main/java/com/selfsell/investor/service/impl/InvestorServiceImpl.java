@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -32,11 +33,15 @@ import com.selfsell.common.util.QRCodeUtil;
 import com.selfsell.investor.bean.CurrencyType;
 import com.selfsell.investor.bean.GoogleAuthStatus;
 import com.selfsell.investor.bean.I18nMessageCode;
+import com.selfsell.investor.bean.TradeRecordStatus;
+import com.selfsell.investor.bean.TradeType;
 import com.selfsell.investor.mybatis.domain.FinancialRecord;
 import com.selfsell.investor.mybatis.domain.FundPlan;
 import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.mybatis.domain.InvestorExt;
 import com.selfsell.investor.mybatis.domain.InvestorGoogleAuth;
+import com.selfsell.investor.mybatis.domain.TradeRecord;
+import com.selfsell.investor.mybatis.domain.TransferRecord;
 import com.selfsell.investor.mybatis.mapper.InvestorExtMapper;
 import com.selfsell.investor.mybatis.mapper.InvestorGoogleAuthMapper;
 import com.selfsell.investor.mybatis.mapper.InvestorMapper;
@@ -45,8 +50,10 @@ import com.selfsell.investor.service.FundPlanService;
 import com.selfsell.investor.service.I18nService;
 import com.selfsell.investor.service.InvestorService;
 import com.selfsell.investor.service.InviteService;
+import com.selfsell.investor.service.ParamSetService;
 import com.selfsell.investor.service.TokenPriceService;
-import com.selfsell.investor.service.TradeService;
+import com.selfsell.investor.service.TradeRecordService;
+import com.selfsell.investor.service.TransferService;
 import com.selfsell.investor.share.Constants;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.FundInfoRES;
@@ -64,6 +71,10 @@ import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InvestorResetPasswordRES;
 import com.selfsell.investor.share.ModifyPasswordREQ;
 import com.selfsell.investor.share.ModifyPasswordRES;
+import com.selfsell.investor.share.QueryTransferInfoREQ;
+import com.selfsell.investor.share.QueryTransferInfoRES;
+import com.selfsell.investor.share.TransferREQ;
+import com.selfsell.investor.share.TransferRES;
 import com.selfsell.investor.share.WBinout;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
@@ -109,7 +120,13 @@ public class InvestorServiceImpl implements InvestorService {
 	FundPlanService fundPlanService;
 
 	@Autowired
-	TradeService tradeService;
+	TradeRecordService tradeRecordService;
+
+	@Autowired
+	ParamSetService paramSetService;
+	
+	@Autowired
+	TransferService transferService;
 
 	@Value("${act.ssc.address}")
 	String mainSscAddress;// ACT主地址
@@ -472,7 +489,7 @@ public class InvestorServiceImpl implements InvestorService {
 						investorExt.setTotalSSC(investorExt.getTotalSSC().subtract(amount));
 					}
 				} else {
-					throw new BusinessException("账户[{}]金额不足", id);
+					throw new BusinessException("账户[{0}]金额不足", id);
 				}
 			} else {
 				investorExt.setAvailableSSC(investorExt.getAvailableSSC().add(amount));
@@ -486,6 +503,66 @@ public class InvestorServiceImpl implements InvestorService {
 		}
 
 		lock.unlock();
+	}
+
+	@Override
+	public QueryTransferInfoRES queryTransferInfo(QueryTransferInfoREQ queryTransferInfoREQ) {
+		// 参数验证
+		CheckParamUtil.checkBoolean(queryTransferInfoREQ.getId() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		Investor investor = queryById(queryTransferInfoREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, queryTransferInfoREQ.getId()));
+		}
+
+		InvestorExt investorExt = investorExtMapper.selectByPrimaryKey(queryTransferInfoREQ.getId());
+
+		BigDecimal fee = G.bd(paramSetService.findParamValue("SSC_TRANSFER_FEE"));
+
+		QueryTransferInfoRES result = new QueryTransferInfoRES();
+		result.setAvailableSSC(investorExt.getAvailableSSC().subtract(fee));
+		result.setFee(fee);
+
+		return result;
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,rollbackFor=Throwable.class)
+	public TransferRES transfer(TransferREQ transferREQ) {
+		CheckParamUtil.checkBoolean(transferREQ.getId()==null, i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		CheckParamUtil.checkBoolean(transferREQ.getAmount()==null, i18nService.getMessage(I18nMessageCode.PC_1000_10));
+		CheckParamUtil.checkEmpty(transferREQ.getAddress(), i18nService.getMessage(I18nMessageCode.PC_1000_11));
+		
+		Investor investor = queryById(transferREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, transferREQ.getId()));
+		}
+		
+		updateAssets(transferREQ.getId(),WBinout.OUT,transferREQ.getAmount().add(transferREQ.getFee()),true);
+		
+		TradeRecord tradeRecord = new TradeRecord();
+		tradeRecord.setAmount(transferREQ.getAmount().add(transferREQ.getFee()));
+		tradeRecord.setCreateTime(new Date());
+		tradeRecord.setInoutFlag(WBinout.OUT);
+		tradeRecord.setInvestorId(transferREQ.getId());
+		tradeRecord.setStatus(TradeRecordStatus.audit);
+		tradeRecord.settAddress(transferREQ.getAddress());
+		tradeRecord.setType(TradeType.transfer_out);
+		tradeRecordService.insert(tradeRecord);
+		
+		TransferRecord transferRecord = new TransferRecord();
+		transferRecord.setAddress(transferREQ.getAddress());
+		transferRecord.setAmount(transferREQ.getAmount());
+		transferRecord.setCreateTime(new Date());
+		transferRecord.setFee(transferREQ.getFee());
+		transferRecord.setInvestorId(transferREQ.getId());
+		transferRecord.setStatus(TradeRecordStatus.audit);
+		transferRecord.setTradeRecordId(tradeRecord.getId());
+		transferService.insert(transferRecord);
+		
+		return new TransferRES();
 	}
 
 }

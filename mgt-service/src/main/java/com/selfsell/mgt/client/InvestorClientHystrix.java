@@ -12,6 +12,7 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.TransferBean;
 
 @Service("investorClientHystrix")
 public class InvestorClientHystrix implements InvestorClient {
@@ -123,5 +124,23 @@ public class InvestorClientHystrix implements InvestorClient {
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
 	public ResultMap fundPlanUpdateStatus(FundPlanBean fundPlanBean) {
 		return investorClient.fundPlanUpdateStatus(fundPlanBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "transferFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap transferList(TransferBean transferBean) {
+		return investorClient.transferList(transferBean);
+	}
+	public ResultMap transferFallback(TransferBean transferBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "transferFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap transferAudit(TransferBean transferBean) {
+		return investorClient.transferAudit(transferBean);
 	}
 }

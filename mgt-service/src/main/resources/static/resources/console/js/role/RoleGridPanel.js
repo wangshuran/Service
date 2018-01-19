@@ -84,7 +84,7 @@ Ext.define('SystemConsole.role.RoleGridPanel', {
 								Ext.Msg.alert('失败', '服务器连接超时');
 								break;
 							case Ext.form.action.Action.SERVER_INVALID:
-								Ext.Msg.alert('失败', action.result.msg);
+								Ext.Msg.alert('失败', action.result.message);
 							}
 						}
 					});

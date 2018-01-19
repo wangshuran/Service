@@ -20,5 +20,9 @@ public enum TradeType {
 	/**
 	 * 收益
 	 */
-	interest
+	interest,
+	/**
+	 * 退回
+	 */
+	back
 }

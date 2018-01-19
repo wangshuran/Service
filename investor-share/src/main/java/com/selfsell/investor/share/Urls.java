@@ -93,4 +93,20 @@ public class Urls {
 	 * 交易信息
 	 */
 	public static final String TRADE_INFO = "/trade/info";
+	/**
+	 * 查询转账信息
+	 */
+	public static final String QUERY_TRANSFER_INFO = "/investor/queryTransferInfo";
+	/**
+	 * 转账
+	 */
+	public static final String TRANSFER = "/investor/transfer";
+	/**
+	 * 转账提现列表
+	 */
+	public static final String TRANSFER_LIST = "/transfer/list";
+	/**
+	 * 转账提现审批
+	 */
+	public static final String TRANSFER_AUDIT = "/transfer/audit";
 }

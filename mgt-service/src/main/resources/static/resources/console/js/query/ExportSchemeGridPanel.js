@@ -78,7 +78,7 @@ Ext.define('SystemConsole.query.ExportSchemeGridPanel', {
 					    	   win.close();
 					    	   win=null;
 					       }else{
-					    	   Ext.Msg.alert('提示', '更新方案失败：'+action.result.msg); 
+					    	   Ext.Msg.alert('提示', '更新方案失败：'+action.result.message); 
 					       }
 					    },
 					    failure: function(form, action) {
@@ -90,7 +90,7 @@ Ext.define('SystemConsole.query.ExportSchemeGridPanel', {
 					                Ext.Msg.alert('Failure', '服务连接失败');
 					                break;
 					            case Ext.form.action.Action.SERVER_INVALID:
-					               Ext.Msg.alert('Failure', action.result.msg);
+					               Ext.Msg.alert('Failure', action.result.message);
 					       }
 					    }});
 				}
@@ -150,7 +150,7 @@ Ext.define('SystemConsole.query.ExportSchemeGridPanel', {
 					    	   win.close();
 					    	   win=null;
 					       }else{
-					    	   Ext.Msg.alert('提示', '增加方案失败：'+action.result.msg); 
+					    	   Ext.Msg.alert('提示', '增加方案失败：'+action.result.message); 
 					       }
 					    },
 					    failure: function(form, action) {
@@ -162,7 +162,7 @@ Ext.define('SystemConsole.query.ExportSchemeGridPanel', {
 					                Ext.Msg.alert('Failure', '服务连接失败');
 					                break;
 					            case Ext.form.action.Action.SERVER_INVALID:
-					               Ext.Msg.alert('Failure', action.result.msg);
+					               Ext.Msg.alert('Failure', action.result.message);
 					       }
 					    }});
 				}

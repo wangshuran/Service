@@ -12,4 +12,7 @@ public interface TradeRecordMapper extends Mapper<TradeRecord> {
 	@Update("update trade_record set status=#{status} where tx_id=#{txId}")
 	void updateTranserStatus(@Param(value = "txId") String txId, @Param(value = "status") String status);
 
+	@Update("update trade_record set status=#{status} where id=#{tradeRecordId}")
+	void updateStatus(@Param(value = "tradeRecordId") Long tradeRecordId, @Param(value = "status") String status);
+
 }

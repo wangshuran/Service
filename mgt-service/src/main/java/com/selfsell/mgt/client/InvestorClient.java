@@ -8,6 +8,7 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.TransferBean;
 import com.selfsell.investor.share.Urls;
 
 @FeignClient(name = "investor-service")
@@ -34,4 +35,8 @@ public interface InvestorClient {
 	public ResultMap fundPlanDel(Long id);
 	@RequestMapping(value = Urls.FUND_PLAN_UPDATE_STATUS)
 	public ResultMap fundPlanUpdateStatus(FundPlanBean fundPlanBean);
+	@RequestMapping(value = Urls.TRANSFER_LIST)
+	public ResultMap transferList(TransferBean transferBean);
+	@RequestMapping(value = Urls.TRANSFER_AUDIT)
+	public ResultMap transferAudit(TransferBean transferBean);
 }

@@ -151,7 +151,7 @@ Ext
 																						Ext.Msg
 																								.alert(
 																										'失败',
-																										action.result.msg);
+																										action.result.message);
 																					}
 																				}
 																			});
@@ -318,7 +318,7 @@ Ext
 																						Ext.Msg
 																								.alert(
 																										'失败',
-																										action.result.msg);
+																										action.result.message);
 																					}
 																				}
 																			});

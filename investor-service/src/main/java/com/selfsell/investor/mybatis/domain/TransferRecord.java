@@ -10,11 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.selfsell.investor.bean.TradeRecordStatus;
-import com.selfsell.investor.bean.TradeType;
-import com.selfsell.investor.share.WBinout;
 
-@Table(name = "trade_record")
-public class TradeRecord implements Serializable {
+@Table(name = "transfer_record")
+public class TransferRecord implements Serializable {
 
 	/**
 	 * 
@@ -27,13 +25,12 @@ public class TradeRecord implements Serializable {
 	private Long investorId;// 投资人ID
 	private Date createTime;// 记录时间
 	private BigDecimal amount;// 交易数量
-	private String sAddress;// 源地址
-	private String tAddress;// 目标地址
-	private WBinout inoutFlag;// 收支标识
-	private String remark;// 描述
-	private String txId;// 交易ID
-	private TradeRecordStatus status;
-	private TradeType type;// 交易类型
+	private BigDecimal fee;// 手续费
+	private String address;// 转出地址
+	private TradeRecordStatus status;// 当前状态
+	private String txId;// 转账交易流水号
+	private String remark;//备注
+	private Long tradeRecordId;//交易记录ID
 
 	public Long getId() {
 		return id;
@@ -67,44 +64,20 @@ public class TradeRecord implements Serializable {
 		this.amount = amount;
 	}
 
-	public String getsAddress() {
-		return sAddress;
+	public BigDecimal getFee() {
+		return fee;
 	}
 
-	public void setsAddress(String sAddress) {
-		this.sAddress = sAddress;
+	public void setFee(BigDecimal fee) {
+		this.fee = fee;
 	}
 
-	public String gettAddress() {
-		return tAddress;
+	public String getAddress() {
+		return address;
 	}
 
-	public void settAddress(String tAddress) {
-		this.tAddress = tAddress;
-	}
-
-	public WBinout getInoutFlag() {
-		return inoutFlag;
-	}
-
-	public void setInoutFlag(WBinout inout) {
-		this.inoutFlag = inout;
-	}
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
-	public String getTxId() {
-		return txId;
-	}
-
-	public void setTxId(String txId) {
-		this.txId = txId;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public TradeRecordStatus getStatus() {
@@ -115,12 +88,28 @@ public class TradeRecord implements Serializable {
 		this.status = status;
 	}
 
-	public TradeType getType() {
-		return type;
+	public String getTxId() {
+		return txId;
 	}
 
-	public void setType(TradeType type) {
-		this.type = type;
+	public void setTxId(String txId) {
+		this.txId = txId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Long getTradeRecordId() {
+		return tradeRecordId;
+	}
+
+	public void setTradeRecordId(Long tradeRecordId) {
+		this.tradeRecordId = tradeRecordId;
 	}
 
 }

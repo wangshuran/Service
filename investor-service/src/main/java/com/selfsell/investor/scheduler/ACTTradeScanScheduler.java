@@ -87,8 +87,8 @@ public class ACTTradeScanScheduler implements InitializingBean {
 		log.info("开始扫描ACT交易");
 
 		Integer blockNum = 0;
+		Integer page = 1;
 		while (true) {
-			Integer page = 1;
 			String url = MessageFormat.format(BASE_URL, G.str(blockNum), mainSscAddress, G.str(page));
 			ActTransactionListBean actTransactionListBean = restTemplate.getForObject(url,
 					ActTransactionListBean.class);
@@ -97,6 +97,10 @@ public class ACTTradeScanScheduler implements InitializingBean {
 			}
 
 			Result result = actTransactionListBean.getResult();
+			
+			if(result.getDataList()==null||result.getDataList().isEmpty()) {
+				break;
+			}
 
 			for (Data data : result.getDataList()) {
 				if (!"0".equals(data.getIs_completed())) {
@@ -123,7 +127,7 @@ public class ACTTradeScanScheduler implements InitializingBean {
 
 			}
 
-			if (result.getCurrentPage() < result.getTotalPage()) {
+			if (result.getCurrentPage() <= result.getTotalPage()) {
 				page = page + 1;
 			}
 		}
@@ -149,7 +153,7 @@ public class ACTTradeScanScheduler implements InitializingBean {
 		// 插入交易记录
 		TradeRecord tradeRecord = new TradeRecord();
 		if (investor != null) {
-			tradeRecord.setInout(WBinout.IN);
+			tradeRecord.setInoutFlag(WBinout.IN);
 			tradeRecord.setAmount(scanTradeRecord.getAmount());
 			tradeRecord.setCreateTime(new Date());
 			tradeRecord.setInvestorId(investor.getId());

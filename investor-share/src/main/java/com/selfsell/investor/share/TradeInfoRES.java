@@ -21,9 +21,11 @@ public class TradeInfoRES implements Serializable{
 	
 
 	private Date time;
-	private String type;
+	private String tradeType;
 	private String remark;
 	private BigDecimal amount;
+	private String ioFlag;
+	private String status;
 
 	/**
 	 * @return 交易时间
@@ -39,12 +41,12 @@ public class TradeInfoRES implements Serializable{
 	/**
 	 * @return 交易类型
 	 */
-	public String getType() {
-		return type;
+	public String getTradeType() {
+		return tradeType;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
 	}
 
 		
@@ -69,5 +71,29 @@ public class TradeInfoRES implements Serializable{
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
+		
+	/**
+	 * @return 收支标识
+	 */
+	public String getIoFlag() {
+		return ioFlag;
+	}
+
+	public void setIoFlag(String ioFlag) {
+		this.ioFlag = ioFlag;
+	}
+
+		
+	/**
+	 * @return 状态
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 
 }

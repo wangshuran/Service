@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.selfsell.common.bean.ResultMap;
 import com.selfsell.investor.service.InvestorService;
 import com.selfsell.investor.service.InviteService;
-import com.selfsell.investor.service.TradeService;
+import com.selfsell.investor.service.TradeRecordService;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthREQ;
@@ -17,7 +17,9 @@ import com.selfsell.investor.share.InvestorRegisterREQ;
 import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InviteInfoREQ;
 import com.selfsell.investor.share.ModifyPasswordREQ;
+import com.selfsell.investor.share.QueryTransferInfoREQ;
 import com.selfsell.investor.share.TradeInfoREQ;
+import com.selfsell.investor.share.TransferREQ;
 import com.selfsell.investor.share.Urls;
 
 @RestController
@@ -25,12 +27,12 @@ public class InvestorController {
 
 	@Autowired
 	InvestorService investorService;
-	
+
 	@Autowired
 	InviteService inviteService;
-	
+
 	@Autowired
-	TradeService tradeService;
+	TradeRecordService tradeRecordService;
 
 	@RequestMapping(value = Urls.INVESTOR_REGISTER)
 	ResultMap register(@RequestBody InvestorRegisterREQ investorRegisterREQ) {
@@ -53,31 +55,42 @@ public class InvestorController {
 		investorService.disableGoogleAuth(disableGoogleAuthREQ);
 		return ResultMap.successResult();
 	}
-	
+
 	@RequestMapping(value = Urls.INVESTOR_RESET_PASSWORD)
 	ResultMap resetPassword(@RequestBody InvestorResetPasswordREQ resetPasswordREQ) {
 		investorService.resetPassword(resetPasswordREQ);
 		return ResultMap.successResult();
 	}
-	
+
 	@RequestMapping(value = Urls.INVITE_INFO)
 	ResultMap inviteInfo(@RequestBody InviteInfoREQ inviteInfoREQ) {
 		return ResultMap.successResult(inviteService.inviteInfo(inviteInfoREQ));
 	}
-	
+
 	@RequestMapping(value = Urls.INVESTOR_MODIFY_PASSWORD)
 	ResultMap modifyPassword(@RequestBody ModifyPasswordREQ modifyPasswordREQ) {
 		investorService.modifyPassword(modifyPasswordREQ);
 		return ResultMap.successResult();
 	}
-	
+
 	@RequestMapping(value = Urls.FUND_INFO)
 	ResultMap fundInfo(@RequestBody FundInfoREQ fundInfoREQ) {
 		return ResultMap.successResult(investorService.fundInfo(fundInfoREQ));
 	}
-	
+
 	@RequestMapping(value = Urls.TRADE_INFO)
 	ResultMap tradeInfo(@RequestBody TradeInfoREQ tradeInfoREQ) {
-		return ResultMap.successResult(tradeService.tradeInfo(tradeInfoREQ));
+		return ResultMap.successResult(tradeRecordService.tradeInfo(tradeInfoREQ));
+	}
+
+	@RequestMapping(value = Urls.QUERY_TRANSFER_INFO)
+	ResultMap queryTransferInfo(@RequestBody QueryTransferInfoREQ queryTransferInfoREQ) {
+		return ResultMap.successResult(investorService.queryTransferInfo(queryTransferInfoREQ));
+	}
+
+	@RequestMapping(value = Urls.TRANSFER)
+	ResultMap transfer(@RequestBody TransferREQ transferREQ) {
+		investorService.transfer(transferREQ);
+		return ResultMap.successResult();
 	}
 }
