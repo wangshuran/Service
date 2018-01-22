@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.selfsell.investor.bean.GoogleAuthStatus;
+import com.selfsell.investor.share.WBinvestorStatus;
 
 /**
  * 
@@ -26,7 +27,7 @@ public class Investor implements Serializable {
 	protected Long id;// 主键ID
 	private String email;// 邮箱
 	private String password;// 密码
-	private String status;// 状态
+	private WBinvestorStatus status;// 状态
 	private GoogleAuthStatus googleAuthStatus;// google验证
 	private String inviteCode;// 邀请码
 	private Date createTime;// 注册时间
@@ -54,14 +55,6 @@ public class Investor implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public GoogleAuthStatus getGoogleAuthStatus() {
@@ -94,6 +87,14 @@ public class Investor implements Serializable {
 
 	public void setSscAddress(String sscAddress) {
 		this.sscAddress = sscAddress;
+	}
+
+	public WBinvestorStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(WBinvestorStatus status) {
+		this.status = status;
 	}
 
 }

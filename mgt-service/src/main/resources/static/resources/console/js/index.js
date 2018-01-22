@@ -32,7 +32,6 @@ Ext.application({
 		});
 
 		Ext.Ajax.on('requestcomplete', checkUserSessionStatus, this);
-		
 		// 创建websocket
 //		connnectWebsocket();
 

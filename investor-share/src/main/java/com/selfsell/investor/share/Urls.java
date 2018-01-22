@@ -109,4 +109,12 @@ public class Urls {
 	 * 转账提现审批
 	 */
 	public static final String TRANSFER_AUDIT = "/transfer/audit";
+	/**
+	 * 投资人列表
+	 */
+	public static final String INVESTOR_LIST = "/investor/list";
+	/**
+	 * 更新投资人状态
+	 */
+	public static final String INVESTOR_UPDATE_STATUS = "investor/updateStatus";
 }

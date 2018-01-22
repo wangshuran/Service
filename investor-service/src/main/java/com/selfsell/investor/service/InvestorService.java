@@ -1,14 +1,18 @@
 package com.selfsell.investor.service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import com.github.pagehelper.PageInfo;
 import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.FundInfoRES;
+import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthRES;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthRES;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.InvestorLoginREQ;
 import com.selfsell.investor.share.InvestorLoginRES;
 import com.selfsell.investor.share.InvestorRegisterREQ;
@@ -130,5 +134,16 @@ public interface InvestorService {
 	 * @return
 	 */
 	TransferRES transfer(TransferREQ transferREQ);
+
+	PageInfo<Investor> pageList(InvestorListBean investorListBean);
+
+	/**
+	 * 转换
+	 * @param list
+	 * @return
+	 */
+	List<InvestorBean> wrapper(List<Investor> list);
+
+	void updateStatus(InvestorBean investorBean);
 
 }

@@ -18,4 +18,7 @@ public interface InvestorMapper extends Mapper<Investor> {
 
 	@Update("update investor set password=#{password} where id=#{id}")
 	public void resetPwd(Long id, String password);
+
+	@Update("update investor set status=#{status} where id=#{id}")
+	public void updateStatus(@Param(value = "id") Long id, @Param(value = "status") String status);
 }

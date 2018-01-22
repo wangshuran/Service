@@ -12,6 +12,8 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.InvestorBean;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.TransferBean;
 
 @Service("investorClientHystrix")
@@ -142,5 +144,27 @@ public class InvestorClientHystrix implements InvestorClient {
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
 	public ResultMap transferAudit(TransferBean transferBean) {
 		return investorClient.transferAudit(transferBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "listFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap list(InvestorListBean investorListBean) {
+		return investorClient.list(investorListBean);
+	}
+	public ResultMap listFallback(InvestorListBean investorListBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "updateStatusFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap updateStatus(InvestorBean investorBean) {
+		return investorClient.updateStatus(investorBean);
+	}
+	public ResultMap updateStatusFallback(InvestorBean investorBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
 	}
 }

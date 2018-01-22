@@ -78,6 +78,10 @@ public enum I18nMessageCode {
 	 */
 	EC_1002_04,
 	/**
+	 * 账户异常请联系管理员
+	 */
+	EC_1002_05,
+	/**
 	 * 密码错误
 	 */
 	password_error,

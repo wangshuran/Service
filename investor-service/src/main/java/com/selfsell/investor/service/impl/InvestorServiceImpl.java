@@ -23,6 +23,8 @@ import org.springframework.util.StringUtils;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -58,10 +60,12 @@ import com.selfsell.investor.share.Constants;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.FundInfoRES;
 import com.selfsell.investor.share.FundInfoRES.ElementFundDetail;
+import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthRES;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthRES;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.InvestorLoginREQ;
 import com.selfsell.investor.share.InvestorLoginRES;
 import com.selfsell.investor.share.InvestorLoginRES.ElementInvestor;
@@ -76,12 +80,14 @@ import com.selfsell.investor.share.QueryTransferInfoRES;
 import com.selfsell.investor.share.TransferREQ;
 import com.selfsell.investor.share.TransferRES;
 import com.selfsell.investor.share.WBinout;
+import com.selfsell.investor.share.WBinvestorStatus;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 import com.warrenstrange.googleauth.ICredentialRepository;
 
 import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.entity.Example.Criteria;
 
 @Component
 public class InvestorServiceImpl implements InvestorService {
@@ -124,7 +130,7 @@ public class InvestorServiceImpl implements InvestorService {
 
 	@Autowired
 	ParamSetService paramSetService;
-	
+
 	@Autowired
 	TransferService transferService;
 
@@ -160,7 +166,7 @@ public class InvestorServiceImpl implements InvestorService {
 		user.setEmail(investorRegisterREQ.getEmail());
 		user.setPassword(DigestUtils.md5Hex(investorRegisterREQ.getPassword()));
 		user.setCreateTime(new Date());
-		user.setStatus("0");
+		user.setStatus(WBinvestorStatus.NORMAL);
 		user.setSscAddress(mainSscAddress + Joiner.on("").join(UUID.randomUUID().toString().split("-")));
 		user.setGoogleAuthStatus(GoogleAuthStatus.OFF);
 		investorMapper.insert(user);
@@ -202,6 +208,10 @@ public class InvestorServiceImpl implements InvestorService {
 		if (investor == null) {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.EC_1002_04));
 		}
+		if(!WBinvestorStatus.NORMAL.equals(investor.getStatus())) {
+			throw new BusinessException(i18nService.getMessage(I18nMessageCode.EC_1002_05));
+		}
+		
 		if (!investor.getPassword().equals(DigestUtils.md5Hex(investorLoginREQ.getPassword()))) {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.password_error));
 		}
@@ -232,6 +242,7 @@ public class InvestorServiceImpl implements InvestorService {
 		ElementInvestor elementInvestor = new ElementInvestor();
 		BeanUtils.copyProperties(investor, elementInvestor);
 		elementInvestor.setGoogleAuthStatus(investor.getGoogleAuthStatus().name());
+		elementInvestor.setStatus(investor.getStatus().name());
 		res.setInvestor(elementInvestor);
 
 		log.info("用户[{}]登录", investor.getEmail());
@@ -528,20 +539,21 @@ public class InvestorServiceImpl implements InvestorService {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,rollbackFor=Throwable.class)
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Throwable.class)
 	public TransferRES transfer(TransferREQ transferREQ) {
-		CheckParamUtil.checkBoolean(transferREQ.getId()==null, i18nService.getMessage(I18nMessageCode.PC_1000_05));
-		CheckParamUtil.checkBoolean(transferREQ.getAmount()==null, i18nService.getMessage(I18nMessageCode.PC_1000_10));
+		CheckParamUtil.checkBoolean(transferREQ.getId() == null, i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		CheckParamUtil.checkBoolean(transferREQ.getAmount() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_10));
 		CheckParamUtil.checkEmpty(transferREQ.getAddress(), i18nService.getMessage(I18nMessageCode.PC_1000_11));
-		
+
 		Investor investor = queryById(transferREQ.getId());
 		if (investor == null) {
 			throw new BusinessException(
 					i18nService.getMessage(I18nMessageCode.account_id_not_exists, transferREQ.getId()));
 		}
-		
-		updateAssets(transferREQ.getId(),WBinout.OUT,transferREQ.getAmount().add(transferREQ.getFee()),true);
-		
+
+		updateAssets(transferREQ.getId(), WBinout.OUT, transferREQ.getAmount().add(transferREQ.getFee()), true);
+
 		TradeRecord tradeRecord = new TradeRecord();
 		tradeRecord.setAmount(transferREQ.getAmount().add(transferREQ.getFee()));
 		tradeRecord.setCreateTime(new Date());
@@ -551,7 +563,7 @@ public class InvestorServiceImpl implements InvestorService {
 		tradeRecord.settAddress(transferREQ.getAddress());
 		tradeRecord.setType(TradeType.transfer_out);
 		tradeRecordService.insert(tradeRecord);
-		
+
 		TransferRecord transferRecord = new TransferRecord();
 		transferRecord.setAddress(transferREQ.getAddress());
 		transferRecord.setAmount(transferREQ.getAmount());
@@ -561,8 +573,63 @@ public class InvestorServiceImpl implements InvestorService {
 		transferRecord.setStatus(TradeRecordStatus.audit);
 		transferRecord.setTradeRecordId(tradeRecord.getId());
 		transferService.insert(transferRecord);
-		
+
 		return new TransferRES();
+	}
+
+	@Override
+	public PageInfo<Investor> pageList(InvestorListBean investorListBean) {
+		Example example = new Example(Investor.class);
+		Criteria param = example.createCriteria();
+		if (!StringUtils.isEmpty(investorListBean.getEmail())) {
+			param.andEqualTo("email", investorListBean.getEmail());
+		}
+		if (!StringUtils.isEmpty(investorListBean.getStatus())) {
+			param.andEqualTo("status", investorListBean.getStatus());
+		}
+		if (!StringUtils.isEmpty(investorListBean.getInviteCode())) {
+			param.andEqualTo("inviteCode", investorListBean.getInviteCode());
+		}
+		if (!StringUtils.isEmpty(investorListBean.getSscAddress())) {
+			param.andEqualTo("sscAddress", investorListBean.getSscAddress());
+		}
+
+		example.orderBy("createTime").desc();
+
+		PageHelper.startPage(investorListBean.getPage() - 1, investorListBean.getLimit(), true);
+		List<Investor> resultList = investorMapper.selectByExample(example);
+		PageInfo<Investor> pageInfo = new PageInfo<Investor>(resultList);
+
+		return pageInfo;
+	}
+
+	@Override
+	public List<InvestorBean> wrapper(List<Investor> list) {
+		if (list != null && !list.isEmpty()) {
+			List<InvestorBean> resultList = Lists.newArrayList();
+			for (Investor investor : list) {
+				InvestorBean investorBean = new InvestorBean();
+				BeanUtils.copyProperties(investor, investorBean);
+				investorBean.setGoogleAuthStatus(investor.getGoogleAuthStatus().name());
+				investorBean.setStatus(investor.getStatus().name());
+				
+				InvestorExt investorExt = investorExtMapper.selectByPrimaryKey(investor.getId());
+				BeanUtils.copyProperties(investorExt, investorBean, "userId", "email");
+
+				resultList.add(investorBean);
+			}
+
+			return resultList;
+		}
+		return null;
+	}
+
+	@Override
+	public void updateStatus(InvestorBean investorBean) {
+		CheckParamUtil.checkBoolean(investorBean.getId() == null, "ID为空");
+		CheckParamUtil.checkEmpty(investorBean.getStatus(), "状态为空");
+		
+		investorMapper.updateStatus(investorBean.getId(),investorBean.getStatus());
 	}
 
 }

@@ -8,6 +8,8 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.InvestorBean;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.investor.share.Urls;
 
@@ -39,4 +41,8 @@ public interface InvestorClient {
 	public ResultMap transferList(TransferBean transferBean);
 	@RequestMapping(value = Urls.TRANSFER_AUDIT)
 	public ResultMap transferAudit(TransferBean transferBean);
+	@RequestMapping(value = Urls.INVESTOR_LIST)
+	public ResultMap list(InvestorListBean investorListBean);
+	@RequestMapping(value = Urls.INVESTOR_UPDATE_STATUS)
+	public ResultMap updateStatus(InvestorBean investorListBean);
 }

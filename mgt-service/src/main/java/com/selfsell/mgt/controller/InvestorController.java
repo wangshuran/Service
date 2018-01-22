@@ -12,6 +12,8 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.InvestorBean;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.mgt.service.InvestorService;
 
@@ -26,6 +28,16 @@ public class InvestorController {
 
 	@Autowired
 	InvestorService investorService;
+	
+	@RequestMapping(value = "list")
+	public ResultMap list(@ModelAttribute InvestorListBean investorListBean) {
+		return investorService.list(investorListBean);
+	}
+	
+	@RequestMapping(value = "updateStatus")
+	public ResultMap updateStatus(@ModelAttribute InvestorBean investorBean) {
+		return investorService.updateStatus(investorBean);
+	}
 
 	@RequestMapping(value = "appBannerList")
 	public ResultMap appBannerList(@ModelAttribute AppBannerListREQ appBannerListREQ) {

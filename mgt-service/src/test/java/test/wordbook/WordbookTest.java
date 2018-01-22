@@ -29,7 +29,7 @@ public class WordbookTest {
 
 	@Test
 	public void genWordbook() throws Exception {
-		String wordbookKey = "inout";
+		String wordbookKey = "investorStatus";
 		String filePath = "D:\\test";
 
 		

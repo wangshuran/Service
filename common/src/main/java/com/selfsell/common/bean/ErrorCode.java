@@ -12,7 +12,8 @@ public enum ErrorCode {
 	/**
 	 * controller exception handler 捕获异常
 	 */
-	controller_catch("2000", "处理器捕获异常");
+	controller_catch("2000", "处理器捕获异常"),
+	internal_catch("2001", "程序内部错误");
 	
 	
 

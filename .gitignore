@@ -1,2 +1,4 @@
 /.gradle
 /eureka-server/bin
+/mgt-service/build
+/common/build

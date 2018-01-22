@@ -1,4 +1,3 @@
-apply plugin: 'war'
 dependencies {
 	compile project(":investor-share")
 	compile project(":investee-share")

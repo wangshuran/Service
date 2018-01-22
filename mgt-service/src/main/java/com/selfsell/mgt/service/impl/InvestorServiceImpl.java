@@ -12,6 +12,8 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.InvestorBean;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.mgt.client.InvestorClient;
 import com.selfsell.mgt.service.FileSystemService;
@@ -114,5 +116,15 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public ResultMap transferAudit(TransferBean transferBean) {
 		return investorClient.transferAudit(transferBean);
+	}
+
+	@Override
+	public ResultMap list(InvestorListBean investorListBean) {
+		return investorClient.list(investorListBean);
+	}
+
+	@Override
+	public ResultMap updateStatus(InvestorBean investorBean) {
+		return investorClient.updateStatus(investorBean);
 	}
 }

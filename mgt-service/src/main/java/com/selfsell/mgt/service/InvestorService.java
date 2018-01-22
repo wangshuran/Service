@@ -7,6 +7,8 @@ import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
+import com.selfsell.investor.share.InvestorBean;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.TransferBean;
 
 public interface InvestorService {
@@ -70,5 +72,19 @@ public interface InvestorService {
 	 * @return
 	 */
 	ResultMap transferAudit(TransferBean transferBean);
+
+	/**
+	 * 投资人列表 
+	 * @param investorListBean
+	 * @return
+	 */
+	ResultMap list(InvestorListBean investorListBean);
+
+	/**
+	 * 更新投资人状态
+	 * @param investorListBean
+	 * @return
+	 */
+	ResultMap updateStatus(InvestorBean investorBean);
 
 }

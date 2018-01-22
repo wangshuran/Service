@@ -155,6 +155,10 @@ function patchZero(n) {
 	return str;
 }
 
+function renderTips(value){
+	return '<div data-qtip="'+value+'">'+value+'</div>';
+}
+
 function checkdate(start, end) {
 	// 得到日期值并转化成日期格式，replace(/\-/g, "\/")是根据验证表达式把日期转化成长日期格式，这样
 

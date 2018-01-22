@@ -1,17 +1,23 @@
 package com.selfsell.investor.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.pagehelper.PageInfo;
 import com.selfsell.common.bean.ResultMap;
+import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.service.InvestorService;
 import com.selfsell.investor.service.InviteService;
 import com.selfsell.investor.service.TradeRecordService;
 import com.selfsell.investor.share.FundInfoREQ;
+import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
 import com.selfsell.investor.share.InvestorEnableGoogleAuthREQ;
+import com.selfsell.investor.share.InvestorListBean;
 import com.selfsell.investor.share.InvestorLoginREQ;
 import com.selfsell.investor.share.InvestorRegisterREQ;
 import com.selfsell.investor.share.InvestorResetPasswordREQ;
@@ -91,6 +97,22 @@ public class InvestorController {
 	@RequestMapping(value = Urls.TRANSFER)
 	ResultMap transfer(@RequestBody TransferREQ transferREQ) {
 		investorService.transfer(transferREQ);
+		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.INVESTOR_LIST)
+	ResultMap list(@RequestBody InvestorListBean investorListBean) {
+		PageInfo<Investor> investorPage = investorService.pageList(investorListBean);
+		
+		List<InvestorBean> resultList = investorService.wrapper(investorPage.getList());
+		
+		return ResultMap.successResult().set("totalAmount", investorPage.getTotal()).set("resultList", resultList);
+	}
+	@RequestMapping(value = Urls.INVESTOR_UPDATE_STATUS)
+	ResultMap updateStatus(@RequestBody InvestorBean investorBean) {
+		
+		investorService.updateStatus(investorBean);
+		
 		return ResultMap.successResult();
 	}
 }
