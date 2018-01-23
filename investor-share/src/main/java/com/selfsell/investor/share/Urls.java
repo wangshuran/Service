@@ -117,4 +117,19 @@ public class Urls {
 	 * 更新投资人状态
 	 */
 	public static final String INVESTOR_UPDATE_STATUS = "investor/updateStatus";
+	/**
+	 * 参数列表
+	 */
+	public static final String PARAMSET_LIST = "/paramset/list";
+	public static final String PARAMSET_ADD = "/paramset/add";
+	public static final String PARAMSET_UPDATE = "/paramset/update";
+	public static final String PARAMSET_DEL = "/paramset/del";
+	/**
+	 * 加入资金计划
+	 */
+	public static final String JOIN_FUND_PLAN = "/investor/join/fundplan";
+	/**
+	 * 退出资金计划
+	 */
+	public static final String QUIT_FUND_PLAN = "investor/quit/fundplan";
 }

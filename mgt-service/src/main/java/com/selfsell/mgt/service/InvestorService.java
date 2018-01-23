@@ -9,6 +9,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 
 public interface InvestorService {
@@ -86,5 +87,33 @@ public interface InvestorService {
 	 * @return
 	 */
 	ResultMap updateStatus(InvestorBean investorBean);
+
+	/**
+	 * 参数设置
+	 * @param paramSetBean
+	 * @return
+	 */
+	ResultMap paramSetList(ParamSetBean paramSetBean);
+
+	/**
+	 * 参数新增
+	 * @param paramSetBean
+	 * @return
+	 */
+	ResultMap paramSetAdd(ParamSetBean paramSetBean);
+
+	/**
+	 * 参数更新
+	 * @param paramSetBean
+	 * @return
+	 */
+	ResultMap paramSetUpdate(ParamSetBean paramSetBean);
+
+	/**
+	 * 参数删除
+	 * @param paramSetBean
+	 * @return
+	 */
+	ResultMap paramSetDel(ParamSetBean paramSetBean);
 
 }

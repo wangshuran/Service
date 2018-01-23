@@ -62,6 +62,14 @@ public enum I18nMessageCode {
 	 */
 	PC_1000_11,
 	/**
+	 * 资金计划ID为空
+	 */
+	PC_1000_12,
+	/**
+	 * 投资记录ID为空
+	 */
+	PC_1000_13,
+	/**
 	 * 请先发送邮箱验证码
 	 */
 	EC_1002_01,
@@ -124,5 +132,21 @@ public enum I18nMessageCode {
 	/**
 	 * 生成令牌异常
 	 */
-	jwt_build_exception
+	jwt_build_exception, 
+	/**
+	 * 资金计划不存在
+	 */
+	fund_plan_not_exists, 
+	/**
+	 * 投资记录不存在
+	 */
+	financial_record_id_not_exists, 
+	/**
+	 * 投资人与投资记录不匹配
+	 */
+	financial_record_not_match, 
+	/**
+	 * 投资记录已经结束
+	 */
+	financial_record_finished
 }

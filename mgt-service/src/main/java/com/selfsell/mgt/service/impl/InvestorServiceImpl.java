@@ -14,6 +14,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.mgt.client.InvestorClient;
 import com.selfsell.mgt.service.FileSystemService;
@@ -126,5 +127,25 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public ResultMap updateStatus(InvestorBean investorBean) {
 		return investorClient.updateStatus(investorBean);
+	}
+
+	@Override
+	public ResultMap paramSetList(ParamSetBean paramSetBean) {
+		return investorClient.paramSetList(paramSetBean);
+	}
+
+	@Override
+	public ResultMap paramSetAdd(ParamSetBean paramSetBean) {
+		return investorClient.paramSetAdd(paramSetBean);
+	}
+
+	@Override
+	public ResultMap paramSetUpdate(ParamSetBean paramSetBean) {
+		return investorClient.paramSetUpdate(paramSetBean);
+	}
+
+	@Override
+	public ResultMap paramSetDel(ParamSetBean paramSetBean) {
+		return investorClient.paramSetDel(paramSetBean);
 	}
 }

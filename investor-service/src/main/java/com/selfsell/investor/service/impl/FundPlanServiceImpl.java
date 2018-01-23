@@ -184,4 +184,9 @@ public class FundPlanServiceImpl implements FundPlanService {
 
 		return resultList;
 	}
+
+	@Override
+	public FundPlan queryById(Long fundPlanId) {
+		return fundPlanMapper.selectByPrimaryKey(fundPlanId);
+	}
 }

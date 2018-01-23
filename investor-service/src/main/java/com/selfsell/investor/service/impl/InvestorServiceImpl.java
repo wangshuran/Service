@@ -75,6 +75,7 @@ import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InvestorResetPasswordRES;
 import com.selfsell.investor.share.ModifyPasswordREQ;
 import com.selfsell.investor.share.ModifyPasswordRES;
+import com.selfsell.investor.share.ParamKeys;
 import com.selfsell.investor.share.QueryTransferInfoREQ;
 import com.selfsell.investor.share.QueryTransferInfoRES;
 import com.selfsell.investor.share.TransferREQ;
@@ -455,6 +456,7 @@ public class InvestorServiceImpl implements InvestorService {
 						@Override
 						public ElementFundDetail apply(FinancialRecord input) {
 							ElementFundDetail fundDetail = new ElementFundDetail();
+							fundDetail.setId(input.getId());
 							fundDetail.setPlanId(input.getFundPlanId());
 							FundPlan fundPlan = fundPlanService.queryByIdAndLang(input.getFundPlanId(),
 									LocaleContextHolder.getLocale().getLanguage());
@@ -462,6 +464,8 @@ public class InvestorServiceImpl implements InvestorService {
 							fundDetail.setPlanTitle(fundPlan.getTitle());
 							fundDetail.setAmount(input.getAmount());
 							fundDetail.setInterest(input.getInterest());
+							fundDetail.setCreateTime(input.getCreateTime());
+							fundDetail.setFinishTime(input.getFinishTime());
 							return fundDetail;
 						}
 					});
@@ -529,7 +533,7 @@ public class InvestorServiceImpl implements InvestorService {
 
 		InvestorExt investorExt = investorExtMapper.selectByPrimaryKey(queryTransferInfoREQ.getId());
 
-		BigDecimal fee = G.bd(paramSetService.findParamValue("SSC_TRANSFER_FEE"));
+		BigDecimal fee = G.bd(paramSetService.findParamValue(ParamKeys.SSC_TRANSFER_FEE));
 
 		QueryTransferInfoRES result = new QueryTransferInfoRES();
 		result.setAvailableSSC(investorExt.getAvailableSSC().subtract(fee));

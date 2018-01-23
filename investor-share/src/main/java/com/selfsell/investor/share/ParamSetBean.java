@@ -1,20 +1,34 @@
-package com.selfsell.investor.mybatis.domain;
+package com.selfsell.investor.share;
 
 import java.io.Serializable;
 
-import javax.persistence.Id;
-
-public class ParamSet implements Serializable {
-
+public class ParamSetBean implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Integer page;
+	private Integer limit;
 
-	@Id
 	private String paramKey;
 	private String paramValue;
 	private String remark;
+
+	public Integer getPage() {
+		return page;
+	}
+
+	public void setPage(Integer page) {
+		this.page = page;
+	}
+
+	public Integer getLimit() {
+		return limit;
+	}
+
+	public void setLimit(Integer limit) {
+		this.limit = limit;
+	}
 
 	public String getParamKey() {
 		return paramKey;
@@ -39,5 +53,4 @@ public class ParamSet implements Serializable {
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
 }

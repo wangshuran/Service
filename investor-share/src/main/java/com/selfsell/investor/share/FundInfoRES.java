@@ -5,6 +5,7 @@ import java.util.List;
 
 import java.math.BigDecimal;
 
+import java.util.Date;
 
 
 /**
@@ -31,6 +32,12 @@ public class FundInfoRES implements Serializable{
 		private BigDecimal amount;
 		
 		private BigDecimal interest;
+		
+		private Long id;
+		
+		private Date createTime;
+		
+		private Date finishTime;
 		
 	
 		/**
@@ -94,6 +101,42 @@ public class FundInfoRES implements Serializable{
 
 		public void setInterest(BigDecimal interest) {
 			this.interest = interest;
+		}
+
+	
+		/**
+		 * @return 主键ID
+		 */
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+	
+		/**
+		 * @return 开始时间
+		 */
+		public Date getCreateTime() {
+			return createTime;
+		}
+
+		public void setCreateTime(Date createTime) {
+			this.createTime = createTime;
+		}
+
+	
+		/**
+		 * @return 结束时间
+		 */
+		public Date getFinishTime() {
+			return finishTime;
+		}
+
+		public void setFinishTime(Date finishTime) {
+			this.finishTime = finishTime;
 		}
 
 	}

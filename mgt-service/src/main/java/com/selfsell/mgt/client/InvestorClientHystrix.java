@@ -14,6 +14,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 
 @Service("investorClientHystrix")
@@ -166,5 +167,37 @@ public class InvestorClientHystrix implements InvestorClient {
 	public ResultMap updateStatusFallback(InvestorBean investorBean, Throwable e) {
 		logger.error("investor-service服务调用异常", e);
 		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "paramSetFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap paramSetList(ParamSetBean paramSetBean) {
+		return investorClient.paramSetList(paramSetBean);
+	}
+	public ResultMap paramSetFallback(ParamSetBean paramSetBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "paramSetFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap paramSetAdd(ParamSetBean paramSetBean) {
+		return investorClient.paramSetAdd(paramSetBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "paramSetFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap paramSetUpdate(ParamSetBean paramSetBean) {
+		return investorClient.paramSetUpdate(paramSetBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "paramSetFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap paramSetDel(ParamSetBean paramSetBean) {
+		return investorClient.paramSetDel(paramSetBean);
 	}
 }

@@ -80,9 +80,18 @@ public interface FundPlanService {
 
 	/**
 	 * 资金计划
+	 * 
 	 * @param fundPlanREQ
 	 * @return
 	 */
 	List<FundPlanRES> fundPlan(FundPlanREQ fundPlanREQ);
+
+	/**
+	 * 通过ID查找资金计划
+	 * 
+	 * @param fundPlanId
+	 * @return
+	 */
+	FundPlan queryById(Long fundPlanId);
 
 }

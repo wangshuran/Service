@@ -14,6 +14,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.mgt.service.InvestorService;
 
@@ -102,6 +103,23 @@ public class InvestorController {
 	@RequestMapping(value = "transferAudit")
 	public ResultMap transferAudit(@ModelAttribute TransferBean transferBean) {
 		return investorService.transferAudit(transferBean);
+	}
+	
+	@RequestMapping(value = "paramSetList")
+	public ResultMap paramSetList(@ModelAttribute ParamSetBean paramSetBean) {
+		return investorService.paramSetList(paramSetBean);
+	}
+	@RequestMapping(value = "paramSetAdd")
+	public ResultMap paramSetAdd(@ModelAttribute ParamSetBean paramSetBean) {
+		return investorService.paramSetAdd(paramSetBean);
+	}
+	@RequestMapping(value = "paramSetUpdate")
+	public ResultMap paramSetUpdate(@ModelAttribute ParamSetBean paramSetBean) {
+		return investorService.paramSetUpdate(paramSetBean);
+	}
+	@RequestMapping(value = "paramSetDel")
+	public ResultMap paramSetDel(@ModelAttribute ParamSetBean paramSetBean) {
+		return investorService.paramSetDel(paramSetBean);
 	}
 
 }

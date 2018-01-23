@@ -10,6 +10,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.investor.share.Urls;
 
@@ -45,4 +46,12 @@ public interface InvestorClient {
 	public ResultMap list(InvestorListBean investorListBean);
 	@RequestMapping(value = Urls.INVESTOR_UPDATE_STATUS)
 	public ResultMap updateStatus(InvestorBean investorListBean);
+	@RequestMapping(value = Urls.PARAMSET_LIST)
+	public ResultMap paramSetList(ParamSetBean paramSetBean);
+	@RequestMapping(value = Urls.PARAMSET_ADD)
+	public ResultMap paramSetAdd(ParamSetBean paramSetBean);
+	@RequestMapping(value = Urls.PARAMSET_UPDATE)
+	public ResultMap paramSetUpdate(ParamSetBean paramSetBean);
+	@RequestMapping(value = Urls.PARAMSET_DEL)
+	public ResultMap paramSetDel(ParamSetBean paramSetBean);
 }
