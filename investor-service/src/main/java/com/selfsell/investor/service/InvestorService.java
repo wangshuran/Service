@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.pagehelper.PageInfo;
 import com.selfsell.investor.mybatis.domain.Investor;
+import com.selfsell.investor.share.CheckGoogleAuthREQ;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.FundInfoRES;
 import com.selfsell.investor.share.InvestorBean;
@@ -145,5 +146,11 @@ public interface InvestorService {
 	List<InvestorBean> wrapper(List<Investor> list);
 
 	void updateStatus(InvestorBean investorBean);
+
+	/**
+	 * 验证google验证
+	 * @param checkGoogleAuthREQ
+	 */
+	void checkGoogleAuth(CheckGoogleAuthREQ checkGoogleAuthREQ);
 
 }

@@ -6,20 +6,19 @@ import java.io.Serializable;
 
 
 /**
- * 退出资金计划
+ * 检查google验证
  *
- * messageId[quitFundPlan]
+ * messageId[checkGoogleAuth]
  * 
  * @author breeze
  * 
  */
-public class QuitFundPlanREQ implements Serializable{
+public class CheckGoogleAuthREQ implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 
 	private Long id;
-	private Long recordId;
 	private String googleAuthCode;
 
 	/**
@@ -31,16 +30,6 @@ public class QuitFundPlanREQ implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-	/**
-	 * @return 记录ID
-	 */
-	public Long getRecordId() {
-		return recordId;
-	}
-
-	public void setRecordId(Long recordId) {
-		this.recordId = recordId;
 	}
 		
 	/**

@@ -131,5 +131,15 @@ public class Urls {
 	/**
 	 * 退出资金计划
 	 */
-	public static final String QUIT_FUND_PLAN = "investor/quit/fundplan";
+	public static final String QUIT_FUND_PLAN = "/investor/quit/fundplan";
+	/**
+	 * 答题活动列表
+	 */
+	public static final String ANSWER_ACTIVITY_LIST = "/answer/activity/list";
+
+	public static final String ANSWER_ACTIVITY_ADD = "/answer/activity/add";
+	public static final String ANSWER_ACTIVITY_UPDATE = "/answer/activity/update";
+	public static final String ANSWER_ACTIVITY_DEL = "/answer/activity/del";
+	public static final String ANSWER_ACTIVITY_UPDATE_STATUS = "/answer/activity/updateStatus";
+	public static final String CHECK_GOOGLE_AUTH = "/check/googleauth";
 }

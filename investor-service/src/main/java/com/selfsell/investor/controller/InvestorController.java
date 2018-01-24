@@ -13,6 +13,7 @@ import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.service.InvestorService;
 import com.selfsell.investor.service.InviteService;
 import com.selfsell.investor.service.TradeRecordService;
+import com.selfsell.investor.share.CheckGoogleAuthREQ;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorDisableGoogleAuthREQ;
@@ -112,6 +113,14 @@ public class InvestorController {
 	ResultMap updateStatus(@RequestBody InvestorBean investorBean) {
 		
 		investorService.updateStatus(investorBean);
+		
+		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.CHECK_GOOGLE_AUTH)
+	ResultMap checkGoogleAuth(@RequestBody CheckGoogleAuthREQ checkGoogleAuthREQ) {
+		
+		investorService.checkGoogleAuth(checkGoogleAuthREQ);
 		
 		return ResultMap.successResult();
 	}

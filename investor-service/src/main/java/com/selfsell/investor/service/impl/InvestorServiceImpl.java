@@ -56,6 +56,7 @@ import com.selfsell.investor.service.ParamSetService;
 import com.selfsell.investor.service.TokenPriceService;
 import com.selfsell.investor.service.TradeRecordService;
 import com.selfsell.investor.service.TransferService;
+import com.selfsell.investor.share.CheckGoogleAuthREQ;
 import com.selfsell.investor.share.Constants;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.FundInfoRES;
@@ -217,7 +218,7 @@ public class InvestorServiceImpl implements InvestorService {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.password_error));
 		}
 
-		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+		/*if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
 			CheckParamUtil.checkEmpty(investorLoginREQ.getGoogleAuthCode(),
 					i18nService.getMessage(I18nMessageCode.PC_1000_07));
 			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
@@ -225,7 +226,7 @@ public class InvestorServiceImpl implements InvestorService {
 			if (!googleAuthenticator.authorizeUser(investor.getEmail(), G.i(investorLoginREQ.getGoogleAuthCode()))) {
 				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
 			}
-		}
+		}*/
 
 		InvestorLoginRES res = new InvestorLoginRES();
 
@@ -419,7 +420,7 @@ public class InvestorServiceImpl implements InvestorService {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.password_error));
 		}
 
-		investorMapper.resetPwd(investor.getId(), DigestUtils.md5Hex(modifyPasswordREQ.getNewPassword()));
+		investorMapper.resetPwd(investor.getId(), DigestUtils.md5Hex(modifyPasswordREQ.getPasswordNew()));
 
 		return new ModifyPasswordRES();
 	}
@@ -634,6 +635,31 @@ public class InvestorServiceImpl implements InvestorService {
 		CheckParamUtil.checkEmpty(investorBean.getStatus(), "状态为空");
 		
 		investorMapper.updateStatus(investorBean.getId(),investorBean.getStatus());
+	}
+
+	@Override
+	public void checkGoogleAuth(CheckGoogleAuthREQ checkGoogleAuthREQ) {
+		CheckParamUtil.checkBoolean(checkGoogleAuthREQ.getId() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		CheckParamUtil.checkEmpty(checkGoogleAuthREQ.getGoogleAuthCode(),
+				i18nService.getMessage(I18nMessageCode.PC_1000_07));
+		
+		Investor investor = investorMapper.selectByPrimaryKey(checkGoogleAuthREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, checkGoogleAuthREQ.getId()));
+		}
+		
+		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+			CheckParamUtil.checkEmpty(checkGoogleAuthREQ.getGoogleAuthCode(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_07));
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			googleAuthenticator.setCredentialRepository(icredentialRepo);
+			if (!googleAuthenticator.authorizeUser(investor.getEmail(), G.i(checkGoogleAuthREQ.getGoogleAuthCode()))) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
+			}
+		}
+		
 	}
 
 }

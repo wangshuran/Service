@@ -20,7 +20,7 @@ public class ModifyPasswordREQ implements Serializable{
 
 	private Long id;
 	private String password;
-	private String newPassword;
+	private String passwordNew;
 
 	/**
 	 * @return 用户ID
@@ -48,12 +48,12 @@ public class ModifyPasswordREQ implements Serializable{
 	/**
 	 * @return 新密码
 	 */
-	public String getNewPassword() {
-		return newPassword;
+	public String getPasswordNew() {
+		return passwordNew;
 	}
 
-	public void setNewPassword(String newPassword) {
-		this.newPassword = newPassword;
+	public void setPasswordNew(String passwordNew) {
+		this.passwordNew = passwordNew;
 	}
 
 

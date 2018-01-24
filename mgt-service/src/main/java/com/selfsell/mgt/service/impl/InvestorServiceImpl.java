@@ -1,5 +1,8 @@
 package com.selfsell.mgt.service.impl;
 
+import java.text.ParseException;
+
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,6 +11,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.breeze.bms.mgt.bean.ResultMap;
+import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
@@ -147,5 +151,44 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public ResultMap paramSetDel(ParamSetBean paramSetBean) {
 		return investorClient.paramSetDel(paramSetBean);
+	}
+
+	@Override
+	public ResultMap answerActivityList(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityList(answerActivityBean);
+	}
+
+	@Override
+	public ResultMap answerActivityAdd(AnswerActivityBean answerActivityBean) {
+		if(!StringUtils.isEmpty(answerActivityBean.getStartTime_show())) {
+			try {
+				answerActivityBean.setStartTime(DateUtils.parseDate(answerActivityBean.getStartTime_show(), "yyyy-MM-dd HH:mm:ss"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return investorClient.answerActivityAdd(answerActivityBean);
+	}
+
+	@Override
+	public ResultMap answerActivityUpdate(AnswerActivityBean answerActivityBean) {
+		if(!StringUtils.isEmpty(answerActivityBean.getStartTime_show())) {
+			try {
+				answerActivityBean.setStartTime(DateUtils.parseDate(answerActivityBean.getStartTime_show(), "yyyy-MM-dd HH:mm:ss"));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+		return investorClient.answerActivityUpdate(answerActivityBean);
+	}
+
+	@Override
+	public ResultMap answerActivityUpdateStatus(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityUpdateStatus(answerActivityBean);
+	}
+
+	@Override
+	public ResultMap answerActivityDel(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityDel(answerActivityBean);
 	}
 }

@@ -3,6 +3,7 @@ package com.selfsell.mgt.service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.breeze.bms.mgt.bean.ResultMap;
+import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
@@ -115,5 +116,20 @@ public interface InvestorService {
 	 * @return
 	 */
 	ResultMap paramSetDel(ParamSetBean paramSetBean);
+
+	/**
+	 * 答题活动列表 
+	 * @param answerActivityBean
+	 * @return
+	 */
+	ResultMap answerActivityList(AnswerActivityBean answerActivityBean);
+
+	ResultMap answerActivityAdd(AnswerActivityBean answerActivityBean);
+
+	ResultMap answerActivityUpdate(AnswerActivityBean answerActivityBean);
+
+	ResultMap answerActivityUpdateStatus(AnswerActivityBean answerActivityBean);
+
+	ResultMap answerActivityDel(AnswerActivityBean answerActivityBean);
 
 }

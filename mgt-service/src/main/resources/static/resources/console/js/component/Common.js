@@ -143,7 +143,7 @@ function formatMoney(v) {
 }
 
 function formatTime(v){
-	return Ext.util.Format.date(new Date(parseInt(v)),'Y-m-d H:m:s');  
+	return Ext.util.Format.date(new Date(parseInt(v)),'Y-m-d H:i:s');  
 }
 
 function patchZero(n) {

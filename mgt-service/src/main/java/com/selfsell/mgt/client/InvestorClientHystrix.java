@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.breeze.bms.mgt.bean.ResultMap;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
@@ -199,5 +200,45 @@ public class InvestorClientHystrix implements InvestorClient {
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
 	public ResultMap paramSetDel(ParamSetBean paramSetBean) {
 		return investorClient.paramSetDel(paramSetBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "answerActivityFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap answerActivityList(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityList(answerActivityBean);
+	}
+	
+	public ResultMap answerActivityFallback(AnswerActivityBean answerActivityBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "answerActivityFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap answerActivityAdd(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityAdd(answerActivityBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "answerActivityFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap answerActivityUpdate(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityUpdate(answerActivityBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "answerActivityFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap answerActivityUpdateStatus(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityUpdateStatus(answerActivityBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "answerActivityFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap answerActivityDel(AnswerActivityBean answerActivityBean) {
+		return investorClient.answerActivityDel(answerActivityBean);
 	}
 }

@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.selfsell.common.exception.BusinessException;
 import com.selfsell.common.util.CheckParamUtil;
+import com.selfsell.common.util.G;
 import com.selfsell.investor.bean.FinancialStatus;
+import com.selfsell.investor.bean.GoogleAuthStatus;
 import com.selfsell.investor.bean.I18nMessageCode;
 import com.selfsell.investor.bean.TradeRecordStatus;
 import com.selfsell.investor.bean.TradeType;
@@ -30,6 +32,8 @@ import com.selfsell.investor.share.JoinFundPlanREQ;
 import com.selfsell.investor.share.QuitFundPlanREQ;
 import com.selfsell.investor.share.WBdateUnit;
 import com.selfsell.investor.share.WBinout;
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.ICredentialRepository;
 
 import tk.mybatis.mapper.entity.Example;
 
@@ -53,6 +57,9 @@ public class FinancialServiceImpl implements FinancialService {
 	@Autowired
 	TradeRecordService tradeRecordService;
 
+	@Autowired
+	ICredentialRepository icredentialRepo;
+	
 	@Override
 	public List<FinancialRecord> queryInvestorFinancialRecords(Long id) {
 		Example example = new Example(FinancialRecord.class);
@@ -74,6 +81,16 @@ public class FinancialServiceImpl implements FinancialService {
 		if (investor == null) {
 			throw new BusinessException(
 					i18nService.getMessage(I18nMessageCode.account_id_not_exists, joinFundPlanREQ.getId()));
+		}
+		
+		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+			CheckParamUtil.checkEmpty(joinFundPlanREQ.getGoogleAuthCode(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_07));
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			googleAuthenticator.setCredentialRepository(icredentialRepo);
+			if (!googleAuthenticator.authorizeUser(investor.getEmail(), G.i(joinFundPlanREQ.getGoogleAuthCode()))) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
+			}
 		}
 
 		FundPlan fundPlan = fundPlanService.queryById(joinFundPlanREQ.getFundPlanId());
@@ -125,6 +142,16 @@ public class FinancialServiceImpl implements FinancialService {
 		if (investor == null) {
 			throw new BusinessException(
 					i18nService.getMessage(I18nMessageCode.account_id_not_exists, quitFundPlanREQ.getId()));
+		}
+		
+		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+			CheckParamUtil.checkEmpty(quitFundPlanREQ.getGoogleAuthCode(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_07));
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			googleAuthenticator.setCredentialRepository(icredentialRepo);
+			if (!googleAuthenticator.authorizeUser(investor.getEmail(), G.i(quitFundPlanREQ.getGoogleAuthCode()))) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
+			}
 		}
 
 		FinancialRecord financialRecord = financialRecordMapper.selectByPrimaryKey(quitFundPlanREQ.getRecordId());

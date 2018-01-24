@@ -2,12 +2,14 @@ package com.selfsell.investor.mybatis.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.selfsell.investor.share.WBrecordStatus;
 
 /**
  * 答题活动
@@ -28,6 +30,7 @@ public class AnswerActivity implements Serializable {
 	private String title;// 活动主题
 	private Date startTime;// 开始时间
 	private BigDecimal reward;// 活动奖励
+	private WBrecordStatus status;//状态
 
 	public Long getId() {
 		return id;
@@ -59,6 +62,14 @@ public class AnswerActivity implements Serializable {
 
 	public void setReward(BigDecimal reward) {
 		this.reward = reward;
+	}
+
+	public WBrecordStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(WBrecordStatus status) {
+		this.status = status;
 	}
 
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.breeze.bms.mgt.bean.ResultMap;
+import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
 import com.selfsell.investor.share.FundPlanBean;
@@ -121,5 +122,27 @@ public class InvestorController {
 	public ResultMap paramSetDel(@ModelAttribute ParamSetBean paramSetBean) {
 		return investorService.paramSetDel(paramSetBean);
 	}
+	
+	@RequestMapping(value = "answerActivityList")
+	public ResultMap answerActivityList(@ModelAttribute AnswerActivityBean answerActivityBean) {
+		return investorService.answerActivityList(answerActivityBean);
+	}
+	@RequestMapping(value = "answerActivityAdd")
+	public ResultMap answerActivityAdd(@ModelAttribute AnswerActivityBean answerActivityBean) {
+		return investorService.answerActivityAdd(answerActivityBean);
+	}
+	@RequestMapping(value = "answerActivityUpdate")
+	public ResultMap answerActivityUpdate(@ModelAttribute AnswerActivityBean answerActivityBean) {
+		return investorService.answerActivityUpdate(answerActivityBean);
+	}
+	@RequestMapping(value = "answerActivityUpdateStatus")
+	public ResultMap answerActivityUpdateStatus(@ModelAttribute AnswerActivityBean answerActivityBean) {
+		return investorService.answerActivityUpdateStatus(answerActivityBean);
+	}
+	@RequestMapping(value = "answerActivityDel")
+	public ResultMap answerActivityDel(@ModelAttribute AnswerActivityBean answerActivityBean) {
+		return investorService.answerActivityDel(answerActivityBean);
+	}
+	
 
 }
