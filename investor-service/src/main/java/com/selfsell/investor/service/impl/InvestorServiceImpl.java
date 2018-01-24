@@ -297,19 +297,26 @@ public class InvestorServiceImpl implements InvestorService {
 		InvestorEnableGoogleAuthRES result = new InvestorEnableGoogleAuthRES();
 
 		if (enableGoogleAuthREQ.getStep() == 0) {// 第一步
-			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
-			googleAuthenticator.setCredentialRepository(icredentialRepo);
-			GoogleAuthenticatorKey googleAuthenticatorKey = googleAuthenticator.createCredentials(investor.getEmail());
-			result.setGoogleAuthKey(googleAuthenticatorKey.getKey());
-			String otpUahtTotpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL("SelfSell", investor.getEmail(),
-					googleAuthenticatorKey);
-			try {
-				String qrcodeBase64 = QRCodeUtil.creatQrImageBase64(otpUahtTotpUrl, 200, 200);
-				result.setGoogleAuthQrcode(qrcodeBase64);
-				updateGoogleAuthQrcode(investor.getId(), qrcodeBase64);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_qrcode_exception));
+			
+			InvestorGoogleAuth googleAuth = investorGoogleAuthMapper.selectByPrimaryKey(investor.getId());
+			if(googleAuth!=null) {
+				result.setGoogleAuthKey(googleAuth.getGoogleAuthKey());
+				result.setGoogleAuthQrcode(googleAuth.getGoogleAuthQrcode());
+			}else {
+				GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+				googleAuthenticator.setCredentialRepository(icredentialRepo);
+				GoogleAuthenticatorKey googleAuthenticatorKey = googleAuthenticator.createCredentials(investor.getEmail());
+				result.setGoogleAuthKey(googleAuthenticatorKey.getKey());
+				String otpUahtTotpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL("SelfSell", investor.getEmail(),
+						googleAuthenticatorKey);
+				try {
+					String qrcodeBase64 = QRCodeUtil.creatQrImageBase64(otpUahtTotpUrl, 200, 200);
+					result.setGoogleAuthQrcode(qrcodeBase64);
+					updateGoogleAuthQrcode(investor.getId(), qrcodeBase64);
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_qrcode_exception));
+				}
 			}
 		} else if (enableGoogleAuthREQ.getStep() == 1) {// 第二步验证绑定
 			CheckParamUtil.checkEmpty(enableGoogleAuthREQ.getGoogleAuthCode(),
