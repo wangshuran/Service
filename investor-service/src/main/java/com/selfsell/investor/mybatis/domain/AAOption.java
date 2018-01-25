@@ -24,8 +24,8 @@ public class AAOption implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Long questionId;// 活动ID
-	private String code;// 选项
-	private String option;// 题目
+	private String optionCode;// 选项
+	private String optionContent;// 题目
 
 	public Long getId() {
 		return id;
@@ -43,20 +43,20 @@ public class AAOption implements Serializable {
 		this.questionId = questionId;
 	}
 
-	public String getCode() {
-		return code;
+	public String getOptionCode() {
+		return optionCode;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
+	public void setOptionCode(String code) {
+		this.optionCode = code;
 	}
 
-	public String getOption() {
-		return option;
+	public String getOptionContent() {
+		return optionContent;
 	}
 
-	public void setOption(String option) {
-		this.option = option;
+	public void setOptionContent(String option) {
+		this.optionContent = option;
 	}
 
 }

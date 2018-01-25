@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.breeze.bms.mgt.bean.ResultMap;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.selfsell.investor.share.AAQuestionBean;
+import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
@@ -241,4 +243,48 @@ public class InvestorClientHystrix implements InvestorClient {
 	public ResultMap answerActivityDel(AnswerActivityBean answerActivityBean) {
 		return investorClient.answerActivityDel(answerActivityBean);
 	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "aaQuestionFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap aaQuestionList(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionList(aaQuestionBean);
+	}
+	public ResultMap aaQuestionFallback(AAQuestionBean aaQuestionBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "aaQuestionFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap aaQuestionAdd(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionAdd(aaQuestionBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "aaQuestionFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap aaQuestionUpdate(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionUpdate(aaQuestionBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "aaQuestionFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap aaQuestionDel(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionDel(aaQuestionBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "aaOptionFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap aaOptionList(AAOptionBean aaOptionBean) {
+		return investorClient.aaOptionList(aaOptionBean);
+	}
+	public ResultMap aaOptionFallback(AAOptionBean aaOptionBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
 }

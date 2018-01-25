@@ -142,4 +142,9 @@ public class Urls {
 	public static final String ANSWER_ACTIVITY_DEL = "/answer/activity/del";
 	public static final String ANSWER_ACTIVITY_UPDATE_STATUS = "/answer/activity/updateStatus";
 	public static final String CHECK_GOOGLE_AUTH = "/check/googleauth";
+	public static final String AA_QUESTION_LIST = "/aa/question/list";
+	public static final String AA_QUESTION_ADD = "/aa/question/add";
+	public static final String AA_QUESTION_UPDATE = "/aa/question/update";
+	public static final String AA_QUESTION_DEL = "/aa/question/del";
+	public static final String AA_OPTION_LIST = "/aa/option/list";
 }

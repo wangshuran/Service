@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.breeze.bms.mgt.bean.ResultMap;
+import com.selfsell.investor.share.AAQuestionBean;
+import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
@@ -142,6 +144,27 @@ public class InvestorController {
 	@RequestMapping(value = "answerActivityDel")
 	public ResultMap answerActivityDel(@ModelAttribute AnswerActivityBean answerActivityBean) {
 		return investorService.answerActivityDel(answerActivityBean);
+	}
+	
+	@RequestMapping(value = "aaQuestionList")
+	public ResultMap aaQuestionList(@ModelAttribute AAQuestionBean aaQuestionBean) {
+		return investorService.aaQuestionList(aaQuestionBean);
+	}
+	@RequestMapping(value = "aaQuestionAdd")
+	public ResultMap aaQuestionAdd(@ModelAttribute AAQuestionBean aaQuestionBean) {
+		return investorService.aaQuestionAdd(aaQuestionBean);
+	}
+	@RequestMapping(value = "aaQuestionUpdate")
+	public ResultMap aaQuestionUpdate(@ModelAttribute AAQuestionBean aaQuestionBean) {
+		return investorService.aaQuestionUpdate(aaQuestionBean);
+	}
+	@RequestMapping(value = "aaQuestionDel")
+	public ResultMap aaQuestionDel(@ModelAttribute AAQuestionBean aaQuestionBean) {
+		return investorService.aaQuestionDel(aaQuestionBean);
+	}
+	@RequestMapping(value = "aaOptionList")
+	public ResultMap aaOptionList(@ModelAttribute AAOptionBean aaOptionBean) {
+		return investorService.aaOptionList(aaOptionBean);
 	}
 	
 

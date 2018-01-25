@@ -4,6 +4,8 @@ import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.breeze.bms.mgt.bean.ResultMap;
+import com.selfsell.investor.share.AAQuestionBean;
+import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
@@ -88,4 +90,19 @@ public interface InvestorClient {
 
 	@RequestMapping(value = Urls.ANSWER_ACTIVITY_DEL)
 	public ResultMap answerActivityDel(AnswerActivityBean answerActivityBean);
+
+	@RequestMapping(value = Urls.AA_QUESTION_LIST)
+	public ResultMap aaQuestionList(AAQuestionBean aaQuestionBean);
+
+	@RequestMapping(value = Urls.AA_QUESTION_ADD)
+	public ResultMap aaQuestionAdd(AAQuestionBean aaQuestionBean);
+
+	@RequestMapping(value = Urls.AA_QUESTION_UPDATE)
+	public ResultMap aaQuestionUpdate(AAQuestionBean aaQuestionBean);
+
+	@RequestMapping(value = Urls.AA_QUESTION_DEL)
+	public ResultMap aaQuestionDel(AAQuestionBean aaQuestionBean);
+
+	@RequestMapping(value = Urls.AA_OPTION_LIST)
+	public ResultMap aaOptionList(AAOptionBean aaOptionBean);
 }

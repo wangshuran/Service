@@ -3,6 +3,8 @@ package com.selfsell.mgt.service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.breeze.bms.mgt.bean.ResultMap;
+import com.selfsell.investor.share.AAQuestionBean;
+import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
@@ -131,5 +133,15 @@ public interface InvestorService {
 	ResultMap answerActivityUpdateStatus(AnswerActivityBean answerActivityBean);
 
 	ResultMap answerActivityDel(AnswerActivityBean answerActivityBean);
+
+	ResultMap aaQuestionList(AAQuestionBean aaQuestionBean);
+
+	ResultMap aaQuestionAdd(AAQuestionBean aaQuestionBean);
+
+	ResultMap aaQuestionUpdate(AAQuestionBean aaQuestionBean);
+
+	ResultMap aaQuestionDel(AAQuestionBean aaQuestionBean);
+
+	ResultMap aaOptionList(AAOptionBean aaOptionBean);
 
 }

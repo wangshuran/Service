@@ -233,7 +233,7 @@ public class InvestorServiceImpl implements InvestorService {
 		// 生成登录token
 		try {
 			String token = JWT.create().withIssuedAt(new Date())
-					.withExpiresAt(new Date(System.currentTimeMillis() + 8 * 60 * 60 * 1000))
+					.withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
 					.withSubject("INVESTORLOGIN").withClaim("investorId", investor.getId())
 					.sign(Algorithm.HMAC256(Constants.JWT_SECRET_AUTH));
 			res.setToken("Bearer " + token);

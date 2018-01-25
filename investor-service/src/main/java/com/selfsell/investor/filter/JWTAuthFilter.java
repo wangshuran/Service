@@ -42,7 +42,7 @@ import com.selfsell.investor.share.Constants;
 @WebFilter(filterName = "Filter1_JWTAuthFilter", urlPatterns = "/*", initParams = {
 		@WebInitParam(name = "EXCLUDED_URL", value = "/investor/register$|" + "/investor/login$|" + "/send/email$|"
 				+ "/app/banner/*|"+ "/transfer/audit$|"+ "/investor/list$|"+ "/investor/updateStatus$|"
-				+ "/paramset/*|"+ "/answer/activity/*|"
+				+ "/paramset/*|"+ "/answer/activity/*|"+ "/aa/*|"
 				+ "/fund/plan/*|" + "/transfer/list$") })
 public class JWTAuthFilter implements Filter {
 

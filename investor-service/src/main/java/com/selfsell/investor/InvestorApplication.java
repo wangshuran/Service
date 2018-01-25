@@ -33,5 +33,5 @@ public class InvestorApplication {
 		slr.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
 		return slr;
 	}
-	
+
 }

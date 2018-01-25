@@ -15,45 +15,48 @@ Ext.define('App.answeractivity.QuestionEditWindow', {
 			},
 			layout : 'column',
 			bodyStyle : 'padding:10px',
-			items : [{
-						columnWidth : 1,
-						layout : 'anchor',
-						items : [ {
-							xtype : 'hidden',
-							name : 'id'
-						},{
-							xtype : 'hidden',
-							name : 'aaId'
-						}, {
-							xtype : 'numberfield',
-							name : 'number',
-							anchor : '95%',
-							fieldLabel : '题号',
-							allowBlank : false
-						} ]
-					},
-					{
-						columnWidth : 1,
-						layout : 'anchor',
-						items : [ {
-							xtype : 'textfield',
-							name : 'question',
-							anchor : '95%',
-							fieldLabel : '题目',
-							allowBlank : false
-						} ]
-					},
-					{
-						columnWidth : 1,
-						layout : 'anchor',
-						items : [ {
-							xtype : 'textfield',
-							name : 'answer',
-							anchor : '95%',
-							fieldLabel : '答案',
-							allowBlank : false
-						} ]
-					}]
+			items : [ {
+				columnWidth : 1,
+				layout : 'anchor',
+				items : [ {
+					xtype : 'hidden',
+					name : 'id'
+				},{
+					xtype : 'numberfield',
+					name : 'number',
+					anchor : '100%',
+					fieldLabel : '题号',
+					allowBlank : false
+				} ]
+			}, {
+				columnWidth : 1,
+				layout : 'anchor',
+				items : [ {
+					xtype : 'textfield',
+					name : 'question',
+					anchor : '100%',
+					fieldLabel : '题目',
+					allowBlank : false
+				} ]
+			}, {
+				columnWidth : 1,
+				layout : 'anchor',
+				items : [ {
+					xtype : 'textfield',
+					name : 'answer',
+					anchor : '100%',
+					fieldLabel : '答案',
+					allowBlank : false
+				} ]
+			}, {
+				columnWidth : 1,
+				layout : 'anchor',
+				items : [ Ext.create('App.answeractivity.OptionGrid', {
+					title : '选项列表',
+					anchor : '100%',
+					height : 300
+				}) ]
+			} ]
 		} ];
 		this.callParent(arguments);
 	}

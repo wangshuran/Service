@@ -10,6 +10,8 @@ import com.github.pagehelper.PageInfo;
 import com.selfsell.common.bean.ResultMap;
 import com.selfsell.investor.mybatis.domain.AnswerActivity;
 import com.selfsell.investor.service.AnswerActivityService;
+import com.selfsell.investor.share.AAQuestionBean;
+import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.Urls;
 
@@ -52,5 +54,41 @@ public class AnswerActivityController {
 		answerActivityService.updateStatus(answerActivityBean);
 
 		return ResultMap.successResult();
+	}
+
+	@RequestMapping(value = Urls.AA_QUESTION_LIST, method = RequestMethod.POST)
+	ResultMap aaQuestionList(@RequestBody AAQuestionBean aaQuestionBean) {
+
+		return ResultMap.successResult().set("resultList", answerActivityService.aaQuestionList(aaQuestionBean));
+	}
+
+	@RequestMapping(value = Urls.AA_QUESTION_ADD, method = RequestMethod.POST)
+	ResultMap aaQuestionAdd(@RequestBody AAQuestionBean aaQuestionBean) {
+
+		answerActivityService.aaQuestionAdd(aaQuestionBean);
+		
+		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.AA_QUESTION_UPDATE, method = RequestMethod.POST)
+	ResultMap aaQuestionUpdate(@RequestBody AAQuestionBean aaQuestionBean) {
+
+		answerActivityService.aaQuestionUpdate(aaQuestionBean);
+		
+		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.AA_QUESTION_DEL, method = RequestMethod.POST)
+	ResultMap aaQuestionDel(@RequestBody AAQuestionBean aaQuestionBean) {
+
+		answerActivityService.aaQuestionDel(aaQuestionBean);
+		
+		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.AA_OPTION_LIST, method = RequestMethod.POST)
+	ResultMap aaOptionList(@RequestBody AAOptionBean aaOptionBean) {
+
+		return ResultMap.successResult().set("resultList", answerActivityService.aaOptionList(aaOptionBean));
 	}
 }

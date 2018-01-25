@@ -1,7 +1,13 @@
 package com.selfsell.investor.service;
 
+import java.util.List;
+
 import com.github.pagehelper.PageInfo;
+import com.selfsell.investor.mybatis.domain.AAOption;
+import com.selfsell.investor.mybatis.domain.AAQuestion;
 import com.selfsell.investor.mybatis.domain.AnswerActivity;
+import com.selfsell.investor.share.AAQuestionBean;
+import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
 
 /**
@@ -21,5 +27,15 @@ public interface AnswerActivityService {
 	void del(AnswerActivityBean answerActivityBean);
 
 	void updateStatus(AnswerActivityBean answerActivityBean);
+
+	List<AAQuestion> aaQuestionList(AAQuestionBean aaQuestionBean);
+
+	void aaQuestionAdd(AAQuestionBean aaQuestionBean);
+
+	void aaQuestionUpdate(AAQuestionBean aaQuestionBean);
+
+	void aaQuestionDel(AAQuestionBean aaQuestionBean);
+
+	List<AAOption> aaOptionList(AAOptionBean aaOptionBean);
 
 }

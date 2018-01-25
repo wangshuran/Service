@@ -61,7 +61,7 @@ function answer_activity_list_render_SP(value, metaData, record, rowIndex,
 
 function showQuestionList(id) {
 	var grid = Ext.create('App.answeractivity.QuestionGrid', {
-
+		aaId:id
 	})
 
 	var win = Ext.create('Ext.window.Window', {
@@ -80,7 +80,16 @@ function showQuestionList(id) {
 		} ]
 	});
 	
+	
 	win.show();
+	
+	grid.store.on('beforeload', function(thiz, options) {
+		Ext.apply(grid.store.proxy.extraParams, {
+			aaId : id
+		});
+	});
+	
+	grid.store.load();
 }
 
 function editAnswerActivity(rowIndex) {

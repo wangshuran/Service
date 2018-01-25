@@ -11,6 +11,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.breeze.bms.mgt.bean.ResultMap;
+import com.selfsell.investor.share.AAQuestionBean;
+import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
 import com.selfsell.investor.share.AppBannerBean;
 import com.selfsell.investor.share.AppBannerListREQ;
@@ -190,5 +192,30 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public ResultMap answerActivityDel(AnswerActivityBean answerActivityBean) {
 		return investorClient.answerActivityDel(answerActivityBean);
+	}
+
+	@Override
+	public ResultMap aaQuestionList(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionList(aaQuestionBean);
+	}
+
+	@Override
+	public ResultMap aaQuestionAdd(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionAdd(aaQuestionBean);
+	}
+
+	@Override
+	public ResultMap aaQuestionUpdate(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionUpdate(aaQuestionBean);
+	}
+
+	@Override
+	public ResultMap aaQuestionDel(AAQuestionBean aaQuestionBean) {
+		return investorClient.aaQuestionDel(aaQuestionBean);
+	}
+
+	@Override
+	public ResultMap aaOptionList(AAOptionBean aaOptionBean) {
+		return investorClient.aaOptionList(aaOptionBean);
 	}
 }
