@@ -147,4 +147,10 @@ public class Urls {
 	public static final String AA_QUESTION_UPDATE = "/aa/question/update";
 	public static final String AA_QUESTION_DEL = "/aa/question/del";
 	public static final String AA_OPTION_LIST = "/aa/option/list";
+	public static final String NEWS_LIST = "/news/list";
+	public static final String NEWS_ADD = "/news/add";
+	public static final String NEWS_UPDATE = "/news/update";
+	public static final String NEWS_DEL = "/news/del";
+	public static final String NEWS_UPDATE_STATUS = "/news/update/status";
+	public static final String NEWS = "/news";
 }

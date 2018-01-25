@@ -34,7 +34,7 @@ public class ControllerExceptionHandler {
 	
 	@ResponseStatus(HttpStatus.OK)
 	@ExceptionHandler(InternalError.class)
-	ResultMap internalException(Exception e) {
+	ResultMap internalException(InternalError e) {
 		log.error("程序内部错误", e);
 
 		return ResultMap.failResult(ErrorCode.internal_catch, e.getMessage());
