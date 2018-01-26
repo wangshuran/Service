@@ -95,6 +95,8 @@ Ext.define('App.answeractivity.QuestionGrid', {
 					grid.store.each(function(record,i){
 						params['options['+i+'].optionCode']=record.data.optionCode;
 						params['options['+i+'].optionContent']=record.data.optionContent;
+						params['options['+i+'].explainContent']=record.data.explainContent;
+						params['options['+i+'].explainTime']=record.data.explainTime;
 					});
 					
 
@@ -192,6 +194,8 @@ Ext.define('App.answeractivity.QuestionGrid', {
 					grid.store.each(function(record,i){
 						params['options['+i+'].optionCode']=record.data.optionCode;
 						params['options['+i+'].optionContent']=record.data.optionContent;
+						params['options['+i+'].explainContent']=record.data.explainContent;
+						params['options['+i+'].explainTime']=record.data.explainTime;
 					});
 					
 

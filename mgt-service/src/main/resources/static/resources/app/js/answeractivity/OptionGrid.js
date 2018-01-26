@@ -10,7 +10,7 @@ Ext.define('App.answeractivity.OptionGrid', {
 
 		Ext.define('aaOptionModel', {
 			extend : 'Ext.data.Model',
-			fields : [ 'id', 'questionId', 'optionCode', 'optionContent']
+			fields : [ 'id', 'questionId', 'optionCode', 'optionContent','explainContent','explainTime']
 		});
 
 		this.store = Ext.create('Ext.data.Store', {
@@ -56,6 +56,14 @@ Ext.define('App.answeractivity.OptionGrid', {
 					header : '选项',
 					flex : 3,
 					dataIndex : 'optionContent'
+				}, {
+					header : '解答',
+					flex : 3,
+					dataIndex : 'explainContent'
+				}, {
+					header : '解答时间',
+					flex : 1,
+					dataIndex : 'explainTime'
 				}];
 		this.tbar = [ {
 			text : '新增',
@@ -71,7 +79,7 @@ Ext.define('App.answeractivity.OptionGrid', {
 		Ext.create("App.answeractivity.OptionEditWindow", {
 			title : '新增选项',
 			width : 400,
-			height : 300,
+			height : 320,
 			modal : true,
 			renderTo : Ext.getBody(),
 			buttons : [ {
@@ -125,7 +133,7 @@ Ext.define('App.answeractivity.OptionGrid', {
 		var editView = Ext.create("App.answeractivity.OptionEditWindow", {
 			title : '编辑选项',
 			width : 400,
-			height : 300,
+			height : 320,
 			modal : true,
 			renderTo : Ext.getBody(),
 			buttons : [ {

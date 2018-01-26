@@ -1,5 +1,6 @@
 package com.selfsell.investor.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.github.pagehelper.PageInfo;
@@ -37,5 +38,11 @@ public interface AnswerActivityService {
 	void aaQuestionDel(AAQuestionBean aaQuestionBean);
 
 	List<AAOption> aaOptionList(AAOptionBean aaOptionBean);
+
+	List<AnswerActivity> queryByPreHeatTime(Date date);
+
+	void updateStage(Long id, String name);
+
+	List<AnswerActivity> queryByStartTime(Date now);
 
 }

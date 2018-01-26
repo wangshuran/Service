@@ -30,6 +30,8 @@ public class InvestorExt implements Serializable {
 	private BigDecimal totalSSC;// 总资产
 	@Column(name = "available_ssc")
 	private BigDecimal availableSSC;// 可用SSC
+	private BigDecimal answerReward;//答题奖励
+	private Integer resurrectionCard;//复活卡
 
 	public Long getUserId() {
 		return userId;
@@ -77,6 +79,22 @@ public class InvestorExt implements Serializable {
 
 	public void setAvailableSSC(BigDecimal availableSSC) {
 		this.availableSSC = availableSSC;
+	}
+
+	public BigDecimal getAnswerReward() {
+		return answerReward;
+	}
+
+	public void setAnswerReward(BigDecimal answerReward) {
+		this.answerReward = answerReward;
+	}
+
+	public Integer getResurrectionCard() {
+		return resurrectionCard;
+	}
+
+	public void setResurrectionCard(Integer resurrectionCard) {
+		this.resurrectionCard = resurrectionCard;
 	}
 
 }

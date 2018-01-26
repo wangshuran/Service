@@ -20,6 +20,7 @@ public class AnswerActivityBean implements Serializable {
 	private String startTime_show;
 	private BigDecimal reward;// 活动奖励
 	private String status;
+	private String stage;
 
 	public Integer getPage() {
 		return page;
@@ -87,6 +88,14 @@ public class AnswerActivityBean implements Serializable {
 
 	public void setStartTime_show(String startTime_show) {
 		this.startTime_show = startTime_show;
+	}
+
+	public String getStage() {
+		return stage;
+	}
+
+	public void setStage(String stage) {
+		this.stage = stage;
 	}
 
 }

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.selfsell.investor.share.WBaaStage;
 import com.selfsell.investor.share.WBrecordStatus;
 
 /**
@@ -28,9 +29,11 @@ public class AnswerActivity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String title;// 活动主题
+	private Date preHeatTime;//预热时间
 	private Date startTime;// 开始时间
 	private BigDecimal reward;// 活动奖励
 	private WBrecordStatus status;//状态
+	private WBaaStage stage;//阶段
 
 	public Long getId() {
 		return id;
@@ -70,6 +73,22 @@ public class AnswerActivity implements Serializable {
 
 	public void setStatus(WBrecordStatus status) {
 		this.status = status;
+	}
+
+	public Date getPreHeatTime() {
+		return preHeatTime;
+	}
+
+	public void setPreHeatTime(Date preHeatTime) {
+		this.preHeatTime = preHeatTime;
+	}
+
+	public WBaaStage getStage() {
+		return stage;
+	}
+
+	public void setStage(WBaaStage stage) {
+		this.stage = stage;
 	}
 
 }

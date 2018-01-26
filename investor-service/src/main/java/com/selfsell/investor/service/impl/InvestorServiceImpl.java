@@ -180,6 +180,8 @@ public class InvestorServiceImpl implements InvestorService {
 		investorExt.setInviteReward(BigDecimal.ZERO);
 		investorExt.setTotalSSC(BigDecimal.ZERO);
 		investorExt.setAvailableSSC(BigDecimal.ZERO);
+		investorExt.setAnswerReward(BigDecimal.ZERO);
+		investorExt.setResurrectionCard(0);
 		investorExtMapper.insert(investorExt);
 		// 设置邀请码
 		inviteService.setUserInviteCode(user.getId());

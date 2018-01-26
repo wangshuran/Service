@@ -42,6 +42,28 @@ Ext.define('App.answeractivity.OptionEditWindow', {
 							fieldLabel : '选项',
 							allowBlank : false
 						} ]
+					},
+					{
+						columnWidth : 1,
+						layout : 'anchor',
+						items : [ {
+							xtype : 'textarea',
+							name : 'explainContent',
+							anchor : '100%',
+							fieldLabel : '解答',
+							allowBlank : false
+						} ]
+					},
+					{
+						columnWidth : 1,
+						layout : 'anchor',
+						items : [ {
+							xtype : 'numberfield',
+							name : 'explainTime',
+							anchor : '100%',
+							fieldLabel : '解答时间',
+							allowBlank : false
+						} ]
 					}]
 		} ];
 		this.callParent(arguments);

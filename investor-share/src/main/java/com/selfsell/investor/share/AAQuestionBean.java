@@ -26,6 +26,8 @@ public class AAQuestionBean implements Serializable {
 		private Long questionId;// 活动ID
 		private String optionCode;// 选项
 		private String optionContent;// 题目
+		private String explainContent;//解答内容
+		private Integer explainTime;//解说时间
 
 		public Long getId() {
 			return id;
@@ -58,6 +60,23 @@ public class AAQuestionBean implements Serializable {
 		public void setOptionContent(String option) {
 			this.optionContent = option;
 		}
+
+		public String getExplainContent() {
+			return explainContent;
+		}
+
+		public void setExplainContent(String explainContent) {
+			this.explainContent = explainContent;
+		}
+
+		public Integer getExplainTime() {
+			return explainTime;
+		}
+
+		public void setExplainTime(Integer explainTime) {
+			this.explainTime = explainTime;
+		}
+
 	}
 
 	public Long getId() {

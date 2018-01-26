@@ -19,6 +19,9 @@ Ext.define('App.answeractivity.AnswerActivityEditWindow', {
 						items : [ {
 							xtype : 'hidden',
 							name : 'id'
+						},{
+							xtype : 'hidden',
+							name : 'stage'
 						}, {
 							xtype : 'textfield',
 							name : 'title',

@@ -1,5 +1,7 @@
 package com.selfsell.investor.service.impl;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -10,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.selfsell.common.util.G;
 import com.selfsell.investor.mybatis.domain.AAOption;
 import com.selfsell.investor.mybatis.domain.AAQuestion;
 import com.selfsell.investor.mybatis.domain.AnswerActivity;
@@ -17,9 +20,12 @@ import com.selfsell.investor.mybatis.mapper.AAOptionMapper;
 import com.selfsell.investor.mybatis.mapper.AAQuestionMapper;
 import com.selfsell.investor.mybatis.mapper.AnswerActivityMapper;
 import com.selfsell.investor.service.AnswerActivityService;
+import com.selfsell.investor.service.ParamSetService;
 import com.selfsell.investor.share.AAQuestionBean;
 import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
+import com.selfsell.investor.share.ParamKeys;
+import com.selfsell.investor.share.WBaaStage;
 import com.selfsell.investor.share.WBrecordStatus;
 
 import tk.mybatis.mapper.entity.Example;
@@ -36,6 +42,9 @@ public class AnswerActivityServiceImpl implements AnswerActivityService {
 
 	@Autowired
 	AAOptionMapper aaOptionMapper;
+
+	@Autowired
+	ParamSetService paramSetService;
 
 	@Override
 	public PageInfo<AnswerActivity> activityList(AnswerActivityBean answerActivityBean) {
@@ -54,29 +63,44 @@ public class AnswerActivityServiceImpl implements AnswerActivityService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=Throwable.class)
+	@Transactional(rollbackFor = Throwable.class)
 	public void add(AnswerActivityBean answerActivityBean) {
 		AnswerActivity activity = new AnswerActivity();
 		BeanUtils.copyProperties(answerActivityBean, activity, "id");
 		activity.setStatus(WBrecordStatus.valueOf(answerActivityBean.getStatus()));
+		activity.setStage(WBaaStage.SCHEDULE);
+
+		if (activity.getStartTime() != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(activity.getStartTime());
+			calendar.add(Calendar.MINUTE, -G.i(paramSetService.findParamValue(ParamKeys.AA_PREHEATE_TIME), 5));
+			activity.setPreHeatTime(calendar.getTime());
+		}
 
 		answerActivityMapper.insert(activity);
 
 	}
 
 	@Override
-	@Transactional(rollbackFor=Throwable.class)
+	@Transactional(rollbackFor = Throwable.class)
 	public void update(AnswerActivityBean answerActivityBean) {
 		AnswerActivity activity = new AnswerActivity();
 		BeanUtils.copyProperties(answerActivityBean, activity);
 		activity.setStatus(WBrecordStatus.valueOf(answerActivityBean.getStatus()));
+		activity.setStage(WBaaStage.SCHEDULE);
 
+		if (activity.getStartTime() != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(activity.getStartTime());
+			calendar.add(Calendar.MINUTE, -G.i(paramSetService.findParamValue(ParamKeys.AA_PREHEATE_TIME), 5));
+			activity.setPreHeatTime(calendar.getTime());
+		}
 		answerActivityMapper.updateByPrimaryKey(activity);
 
 	}
 
 	@Override
-	@Transactional(rollbackFor=Throwable.class)
+	@Transactional(rollbackFor = Throwable.class)
 	public void del(AnswerActivityBean answerActivityBean) {
 
 		answerActivityMapper.deleteByPrimaryKey(answerActivityBean.getId());
@@ -84,7 +108,7 @@ public class AnswerActivityServiceImpl implements AnswerActivityService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=Throwable.class)
+	@Transactional(rollbackFor = Throwable.class)
 	public void updateStatus(AnswerActivityBean answerActivityBean) {
 		answerActivityMapper.updateStatus(answerActivityBean.getId(), answerActivityBean.getStatus());
 	}
@@ -99,7 +123,7 @@ public class AnswerActivityServiceImpl implements AnswerActivityService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=Throwable.class)
+	@Transactional(rollbackFor = Throwable.class)
 	public void aaQuestionAdd(AAQuestionBean aaQuestionBean) {
 		AAQuestion question = new AAQuestion();
 		BeanUtils.copyProperties(aaQuestionBean, question);
@@ -117,14 +141,14 @@ public class AnswerActivityServiceImpl implements AnswerActivityService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=Throwable.class)
+	@Transactional(rollbackFor = Throwable.class)
 	public void aaQuestionUpdate(AAQuestionBean aaQuestionBean) {
 		AAQuestion question = new AAQuestion();
 		BeanUtils.copyProperties(aaQuestionBean, question);
 		aaQuestionMapper.updateByPrimaryKey(question);
-		
+
 		aaOptionMapper.delByQuestionId(question.getId());
-		
+
 		if (aaQuestionBean.getOptions() != null && !aaQuestionBean.getOptions().isEmpty()) {
 			for (AAOptionBean aaOptionBean : aaQuestionBean.getOptions()) {
 				AAOption option = new AAOption();
@@ -137,11 +161,11 @@ public class AnswerActivityServiceImpl implements AnswerActivityService {
 	}
 
 	@Override
-	@Transactional(rollbackFor=Throwable.class)
+	@Transactional(rollbackFor = Throwable.class)
 	public void aaQuestionDel(AAQuestionBean aaQuestionBean) {
-		
+
 		aaOptionMapper.delByQuestionId(aaQuestionBean.getId());
-		
+
 		aaQuestionMapper.deleteByPrimaryKey(aaQuestionBean.getId());
 	}
 
@@ -152,6 +176,28 @@ public class AnswerActivityServiceImpl implements AnswerActivityService {
 
 		example.orderBy("optionCode").asc();
 		return aaOptionMapper.selectByExample(example);
+	}
+
+	@Override
+	public List<AnswerActivity> queryByPreHeatTime(Date date) {
+		Example example = new Example(AnswerActivity.class);
+		example.createCriteria().andEqualTo("preHeatTime", date).andEqualTo("stage", WBaaStage.TOSTART);
+
+		return answerActivityMapper.selectByExample(example);
+	}
+
+	@Override
+	public void updateStage(Long id, String stage) {
+		answerActivityMapper.updateStage(id, stage);
+
+	}
+
+	@Override
+	public List<AnswerActivity> queryByStartTime(Date now) {
+		Example example = new Example(AnswerActivity.class);
+		example.createCriteria().andEqualTo("startTime", now).andEqualTo("stage", WBaaStage.PREHEATING);
+
+		return answerActivityMapper.selectByExample(example);
 	}
 
 }
