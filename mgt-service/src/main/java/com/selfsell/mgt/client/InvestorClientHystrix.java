@@ -17,6 +17,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.NewsBean;
 import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 
@@ -283,6 +284,46 @@ public class InvestorClientHystrix implements InvestorClient {
 		return investorClient.aaOptionList(aaOptionBean);
 	}
 	public ResultMap aaOptionFallback(AAOptionBean aaOptionBean, Throwable e) {
+		logger.error("investor-service服务调用异常", e);
+		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "newsFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap newsList(NewsBean newsBean) {
+		return investorClient.newsList(newsBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "newsFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap newsAdd(NewsBean newsBean) {
+		return investorClient.newsAdd(newsBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "newsFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap newsUpdate(NewsBean newsBean) {
+		return investorClient.newsUpdate(newsBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "newsFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap newsDel(NewsBean newsBean) {
+		return investorClient.newsDel(newsBean);
+	}
+
+	@Override
+	@HystrixCommand(fallbackMethod = "newsFallback", commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000") })
+	public ResultMap newsUpdateStatus(NewsBean newsBean) {
+		return investorClient.newsUpdateStatus(newsBean);
+	}
+	
+	public ResultMap newsFallback(NewsBean newsBean, Throwable e) {
 		logger.error("investor-service服务调用异常", e);
 		return ResultMap.failResult("3000", "investor-service服务方法调用异常" + e.getMessage());
 	}

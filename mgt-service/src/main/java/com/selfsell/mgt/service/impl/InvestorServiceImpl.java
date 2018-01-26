@@ -20,6 +20,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.NewsBean;
 import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.mgt.client.InvestorClient;
@@ -217,5 +218,42 @@ public class InvestorServiceImpl implements InvestorService {
 	@Override
 	public ResultMap aaOptionList(AAOptionBean aaOptionBean) {
 		return investorClient.aaOptionList(aaOptionBean);
+	}
+
+	@Override
+	public ResultMap newsList(NewsBean newsBean) {
+		return investorClient.newsList(newsBean);
+	}
+
+	@Override
+	public ResultMap newsAdd(MultipartFile file, NewsBean newsBean) {
+		String filepath = fileSystemService.save("/image/news", file);
+		String imgUrl = webDomain + "/file/show?path=" + filepath;
+
+		if (!StringUtils.isEmpty(filepath))
+			newsBean.setImgUrl(imgUrl);
+		
+		return investorClient.newsAdd(newsBean);
+	}
+
+	@Override
+	public ResultMap newsUpdate(MultipartFile file, NewsBean newsBean) {
+		String filepath = fileSystemService.save("/image/news", file);
+		String imgUrl = webDomain + "/file/show?path=" + filepath;
+
+		if (!StringUtils.isEmpty(filepath))
+			newsBean.setImgUrl(imgUrl);
+		
+		return investorClient.newsUpdate(newsBean);
+	}
+
+	@Override
+	public ResultMap newsDel(NewsBean newsBean) {
+		return investorClient.newsDel(newsBean);
+	}
+
+	@Override
+	public ResultMap newsUpdateStatus(NewsBean newsBean) {
+		return investorClient.newsUpdateStatus(newsBean);
 	}
 }

@@ -17,6 +17,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.NewsBean;
 import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.mgt.service.InvestorService;
@@ -165,6 +166,33 @@ public class InvestorController {
 	@RequestMapping(value = "aaOptionList")
 	public ResultMap aaOptionList(@ModelAttribute AAOptionBean aaOptionBean) {
 		return investorService.aaOptionList(aaOptionBean);
+	}
+	
+	@RequestMapping(value = "newsList")
+	public ResultMap newsList(@ModelAttribute NewsBean newsBean) {
+		return investorService.newsList(newsBean);
+	}
+
+	@RequestMapping(value = "newsAdd")
+	public ResultMap newsAdd(@RequestParam(value = "imgFile") MultipartFile file,
+			@ModelAttribute NewsBean newsBean) {
+		return investorService.newsAdd(file, newsBean);
+	}
+	
+	@RequestMapping(value = "newsUpdate")
+	public ResultMap newsUpdate(@RequestParam(value = "imgFile") MultipartFile file,
+			@ModelAttribute NewsBean newsBean) {
+		return investorService.newsUpdate(file, newsBean);
+	}
+	
+	@RequestMapping(value = "newsDel")
+	public ResultMap newsDel(@ModelAttribute NewsBean newsBean) {
+		return investorService.newsDel(newsBean);
+	}
+	
+	@RequestMapping(value = "newsUpdateStatus")
+	public ResultMap newsUpdateStatus(@ModelAttribute NewsBean newsBean) {
+		return investorService.newsUpdateStatus(newsBean);
 	}
 	
 

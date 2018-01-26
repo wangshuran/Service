@@ -13,6 +13,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.NewsBean;
 import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 import com.selfsell.investor.share.Urls;
@@ -105,4 +106,19 @@ public interface InvestorClient {
 
 	@RequestMapping(value = Urls.AA_OPTION_LIST)
 	public ResultMap aaOptionList(AAOptionBean aaOptionBean);
+
+	@RequestMapping(value = Urls.NEWS_LIST)
+	public ResultMap newsList(NewsBean newsBean);
+
+	@RequestMapping(value = Urls.NEWS_ADD)
+	public ResultMap newsAdd(NewsBean newsBean);
+
+	@RequestMapping(value = Urls.NEWS_UPDATE)
+	public ResultMap newsUpdate(NewsBean newsBean);
+
+	@RequestMapping(value = Urls.NEWS_DEL)
+	public ResultMap newsDel(NewsBean newsBean);
+
+	@RequestMapping(value = Urls.NEWS_UPDATE_STATUS)
+	public ResultMap newsUpdateStatus(NewsBean newsBean);
 }

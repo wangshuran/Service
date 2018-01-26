@@ -12,6 +12,7 @@ import com.selfsell.investor.share.FundPlanBean;
 import com.selfsell.investor.share.FundPlanBean.FundPlanLangBean;
 import com.selfsell.investor.share.InvestorBean;
 import com.selfsell.investor.share.InvestorListBean;
+import com.selfsell.investor.share.NewsBean;
 import com.selfsell.investor.share.ParamSetBean;
 import com.selfsell.investor.share.TransferBean;
 
@@ -143,5 +144,15 @@ public interface InvestorService {
 	ResultMap aaQuestionDel(AAQuestionBean aaQuestionBean);
 
 	ResultMap aaOptionList(AAOptionBean aaOptionBean);
+
+	ResultMap newsList(NewsBean newsBean);
+
+	ResultMap newsAdd(MultipartFile file, NewsBean newsBean);
+
+	ResultMap newsUpdate(MultipartFile file, NewsBean newsBean);
+
+	ResultMap newsDel(NewsBean newsBean);
+
+	ResultMap newsUpdateStatus(NewsBean newsBean);
 
 }
