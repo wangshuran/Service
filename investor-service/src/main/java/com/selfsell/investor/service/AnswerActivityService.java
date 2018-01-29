@@ -10,6 +10,8 @@ import com.selfsell.investor.mybatis.domain.AnswerActivity;
 import com.selfsell.investor.share.AAQuestionBean;
 import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
+import com.selfsell.investor.share.JoinAnswerActivityREQ;
+import com.selfsell.investor.share.JoinAnswerActivityRES;
 
 /**
  * 答题活动服务
@@ -44,5 +46,7 @@ public interface AnswerActivityService {
 	void updateStage(Long id, String name);
 
 	List<AnswerActivity> queryByStartTime(Date now);
+
+	JoinAnswerActivityRES joinAnswerActivity(JoinAnswerActivityREQ joinAnswerActivityREQ);
 
 }

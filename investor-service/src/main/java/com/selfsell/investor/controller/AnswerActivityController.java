@@ -13,6 +13,7 @@ import com.selfsell.investor.service.AnswerActivityService;
 import com.selfsell.investor.share.AAQuestionBean;
 import com.selfsell.investor.share.AAQuestionBean.AAOptionBean;
 import com.selfsell.investor.share.AnswerActivityBean;
+import com.selfsell.investor.share.JoinAnswerActivityREQ;
 import com.selfsell.investor.share.Urls;
 
 @RestController
@@ -90,5 +91,11 @@ public class AnswerActivityController {
 	ResultMap aaOptionList(@RequestBody AAOptionBean aaOptionBean) {
 
 		return ResultMap.successResult().set("resultList", answerActivityService.aaOptionList(aaOptionBean));
+	}
+	
+	@RequestMapping(value = Urls.ANSWER_ACTIVITY_JOIN, method = RequestMethod.POST)
+	ResultMap joinAnswerActivity(@RequestBody JoinAnswerActivityREQ joinAnswerActivityREQ) {
+
+		return ResultMap.successResult(answerActivityService.joinAnswerActivity(joinAnswerActivityREQ));
 	}
 }

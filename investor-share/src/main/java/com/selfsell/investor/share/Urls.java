@@ -167,4 +167,8 @@ public class Urls {
 	 * 使用复活卡
 	 */
 	public static final String USE_RESURRECTION_CARD = "/resurrection/card/use";
+	/**
+	 * 加入答题活动
+	 */
+	public static final String ANSWER_ACTIVITY_JOIN = "/answer/activity/join";
 }

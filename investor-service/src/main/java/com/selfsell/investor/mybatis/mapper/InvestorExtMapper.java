@@ -1,8 +1,10 @@
 package com.selfsell.investor.mybatis.mapper;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.selfsell.investor.mybatis.domain.InvestorExt;
@@ -21,4 +23,7 @@ public interface InvestorExtMapper extends Mapper<InvestorExt> {
 	@Update("update investor_ext set total_ssc = #{totalSSC},available_ssc = #{availableSSC} where user_id=#{userId}")
 	void updateAssets(@Param(value = "userId")Long userId, @Param(value = "totalSSC")BigDecimal totalSSC, @Param(value = "availableSSC")BigDecimal availableSSC);
 
+	
+	@Select("select * from (select (@rownum:=@rownum+1) as rownum, a.* from investor_ext a, (select @rownum:= 0 ) r  order by a.answer_reward desc) b where b.user_id=#{id}")
+	Map<String,Object> queryRankInfo(@Param(value="id")Long id);
 }
