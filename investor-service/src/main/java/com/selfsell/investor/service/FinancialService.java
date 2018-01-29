@@ -30,4 +30,18 @@ public interface FinancialService {
 	 */
 	void quitFundPlan(QuitFundPlanREQ quitFundPlanREQ);
 
+	/**
+	 * 查询进行中的理财记录
+	 * 
+	 * @return
+	 */
+	List<FinancialRecord> queryIngRecords();
+
+	/**
+	 * 更新理财记录
+	 * 
+	 * @param record
+	 */
+	void update(FinancialRecord record);
+
 }

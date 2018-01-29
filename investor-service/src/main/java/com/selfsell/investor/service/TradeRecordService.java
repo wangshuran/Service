@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.selfsell.investor.bean.TradeRecordStatus;
 import com.selfsell.investor.mybatis.domain.TradeRecord;
+import com.selfsell.investor.share.TradeInfoPageREQ;
+import com.selfsell.investor.share.TradeInfoPageRES;
 import com.selfsell.investor.share.TradeInfoREQ;
 import com.selfsell.investor.share.TradeInfoRES;
 
@@ -27,5 +29,7 @@ public interface TradeRecordService {
 	 * @param status
 	 */
 	void updateStatus(Long tradeRecordId, TradeRecordStatus status);
+
+	TradeInfoPageRES tradeInfoPage(TradeInfoPageREQ tradeInfoPageREQ);
 
 }

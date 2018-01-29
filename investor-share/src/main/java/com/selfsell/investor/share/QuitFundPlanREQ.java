@@ -21,6 +21,7 @@ public class QuitFundPlanREQ implements Serializable{
 	private Long id;
 	private Long recordId;
 	private String googleAuthCode;
+	private String capitalPassword;
 
 	/**
 	 * @return 主键ID
@@ -52,6 +53,18 @@ public class QuitFundPlanREQ implements Serializable{
 
 	public void setGoogleAuthCode(String googleAuthCode) {
 		this.googleAuthCode = googleAuthCode;
+	}
+
+		
+	/**
+	 * @return 资金密码
+	 */
+	public String getCapitalPassword() {
+		return capitalPassword;
+	}
+
+	public void setCapitalPassword(String capitalPassword) {
+		this.capitalPassword = capitalPassword;
 	}
 
 

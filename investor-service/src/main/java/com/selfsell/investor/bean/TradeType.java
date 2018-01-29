@@ -24,5 +24,9 @@ public enum TradeType {
 	/**
 	 * 退回
 	 */
-	back
+	back,
+	/**
+	 * 购买复活卡
+	 */
+	buy_resurrection_card
 }

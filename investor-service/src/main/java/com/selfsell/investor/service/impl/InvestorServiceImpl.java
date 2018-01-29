@@ -42,11 +42,13 @@ import com.selfsell.investor.mybatis.domain.FundPlan;
 import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.mybatis.domain.InvestorExt;
 import com.selfsell.investor.mybatis.domain.InvestorGoogleAuth;
+import com.selfsell.investor.mybatis.domain.ResurrectionCardRecord;
 import com.selfsell.investor.mybatis.domain.TradeRecord;
 import com.selfsell.investor.mybatis.domain.TransferRecord;
 import com.selfsell.investor.mybatis.mapper.InvestorExtMapper;
 import com.selfsell.investor.mybatis.mapper.InvestorGoogleAuthMapper;
 import com.selfsell.investor.mybatis.mapper.InvestorMapper;
+import com.selfsell.investor.mybatis.mapper.ResurrectionCardRecordMapper;
 import com.selfsell.investor.service.FinancialService;
 import com.selfsell.investor.service.FundPlanService;
 import com.selfsell.investor.service.I18nService;
@@ -56,6 +58,10 @@ import com.selfsell.investor.service.ParamSetService;
 import com.selfsell.investor.service.TokenPriceService;
 import com.selfsell.investor.service.TradeRecordService;
 import com.selfsell.investor.service.TransferService;
+import com.selfsell.investor.share.BuyResurrectionCardREQ;
+import com.selfsell.investor.share.BuyResurrectionCardRES;
+import com.selfsell.investor.share.CapitalPasswordAddREQ;
+import com.selfsell.investor.share.CapitalPasswordUpdateREQ;
 import com.selfsell.investor.share.CheckGoogleAuthREQ;
 import com.selfsell.investor.share.Constants;
 import com.selfsell.investor.share.FundInfoREQ;
@@ -81,8 +87,11 @@ import com.selfsell.investor.share.QueryTransferInfoREQ;
 import com.selfsell.investor.share.QueryTransferInfoRES;
 import com.selfsell.investor.share.TransferREQ;
 import com.selfsell.investor.share.TransferRES;
+import com.selfsell.investor.share.UseResurrectionCardREQ;
+import com.selfsell.investor.share.UseResurrectionCardRES;
 import com.selfsell.investor.share.WBinout;
 import com.selfsell.investor.share.WBinvestorStatus;
+import com.selfsell.investor.share.WBrcChannel;
 import com.warrenstrange.googleauth.GoogleAuthenticator;
 import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
 import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
@@ -138,6 +147,9 @@ public class InvestorServiceImpl implements InvestorService {
 
 	@Value("${act.ssc.address}")
 	String mainSscAddress;// ACT主地址
+
+	@Autowired
+	ResurrectionCardRecordMapper resurrectionCardRecordMapper;
 
 	@Override
 	@Transactional(rollbackFor = Throwable.class)
@@ -212,32 +224,33 @@ public class InvestorServiceImpl implements InvestorService {
 		if (investor == null) {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.EC_1002_04));
 		}
-		if(!WBinvestorStatus.NORMAL.equals(investor.getStatus())) {
+		if (!WBinvestorStatus.NORMAL.equals(investor.getStatus())) {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.EC_1002_05));
 		}
-		
+
 		if (!investor.getPassword().equals(DigestUtils.md5Hex(investorLoginREQ.getPassword()))) {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.password_error));
 		}
 
-		/*if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
-			CheckParamUtil.checkEmpty(investorLoginREQ.getGoogleAuthCode(),
-					i18nService.getMessage(I18nMessageCode.PC_1000_07));
-			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
-			googleAuthenticator.setCredentialRepository(icredentialRepo);
-			if (!googleAuthenticator.authorizeUser(investor.getEmail(), G.i(investorLoginREQ.getGoogleAuthCode()))) {
-				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
-			}
-		}*/
+		/*
+		 * if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+		 * CheckParamUtil.checkEmpty(investorLoginREQ.getGoogleAuthCode(),
+		 * i18nService.getMessage(I18nMessageCode.PC_1000_07)); GoogleAuthenticator
+		 * googleAuthenticator = new GoogleAuthenticator();
+		 * googleAuthenticator.setCredentialRepository(icredentialRepo); if
+		 * (!googleAuthenticator.authorizeUser(investor.getEmail(),
+		 * G.i(investorLoginREQ.getGoogleAuthCode()))) { throw new
+		 * BusinessException(i18nService.getMessage(I18nMessageCode.
+		 * google_auth_check_exception)); } }
+		 */
 
 		InvestorLoginRES res = new InvestorLoginRES();
 
 		// 生成登录token
 		try {
 			String token = JWT.create().withIssuedAt(new Date())
-					.withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-					.withSubject("INVESTORLOGIN").withClaim("investorId", investor.getId())
-					.sign(Algorithm.HMAC256(Constants.JWT_SECRET_AUTH));
+					.withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000)).withSubject("INVESTORLOGIN")
+					.withClaim("investorId", investor.getId()).sign(Algorithm.HMAC256(Constants.JWT_SECRET_AUTH));
 			res.setToken("Bearer " + token);
 		} catch (Exception e) {
 			throw new BusinessException(i18nService.getMessage(I18nMessageCode.jwt_build_exception));
@@ -299,18 +312,19 @@ public class InvestorServiceImpl implements InvestorService {
 		InvestorEnableGoogleAuthRES result = new InvestorEnableGoogleAuthRES();
 
 		if (enableGoogleAuthREQ.getStep() == 0) {// 第一步
-			
+
 			InvestorGoogleAuth googleAuth = investorGoogleAuthMapper.selectByPrimaryKey(investor.getId());
-			if(googleAuth!=null) {
+			if (googleAuth != null) {
 				result.setGoogleAuthKey(googleAuth.getGoogleAuthKey());
 				result.setGoogleAuthQrcode(googleAuth.getGoogleAuthQrcode());
-			}else {
+			} else {
 				GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
 				googleAuthenticator.setCredentialRepository(icredentialRepo);
-				GoogleAuthenticatorKey googleAuthenticatorKey = googleAuthenticator.createCredentials(investor.getEmail());
+				GoogleAuthenticatorKey googleAuthenticatorKey = googleAuthenticator
+						.createCredentials(investor.getEmail());
 				result.setGoogleAuthKey(googleAuthenticatorKey.getKey());
-				String otpUahtTotpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL("SelfSell", investor.getEmail(),
-						googleAuthenticatorKey);
+				String otpUahtTotpUrl = GoogleAuthenticatorQRGenerator.getOtpAuthTotpURL("SelfSell",
+						investor.getEmail(), googleAuthenticatorKey);
 				try {
 					String qrcodeBase64 = QRCodeUtil.creatQrImageBase64(otpUahtTotpUrl, 200, 200);
 					result.setGoogleAuthQrcode(qrcodeBase64);
@@ -523,7 +537,8 @@ public class InvestorServiceImpl implements InvestorService {
 				}
 			}
 
-			investorExtMapper.updateByPrimaryKey(investorExt);
+			investorExtMapper.updateAssets(investorExt.getUserId(), investorExt.getTotalSSC(),
+					investorExt.getAvailableSSC());
 
 		}
 
@@ -564,6 +579,24 @@ public class InvestorServiceImpl implements InvestorService {
 		if (investor == null) {
 			throw new BusinessException(
 					i18nService.getMessage(I18nMessageCode.account_id_not_exists, transferREQ.getId()));
+		}
+
+		if (!StringUtils.isEmpty(investor.getCapitalPassword())) {
+			CheckParamUtil.checkEmpty(transferREQ.getCapitalPassword(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_14));
+			if (!DigestUtils.md5Hex(transferREQ.getCapitalPassword()).equals(investor.getCapitalPassword())) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.capital_password_not_match));
+			}
+		}
+
+		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+			CheckParamUtil.checkEmpty(transferREQ.getGoogleAuthCode(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_07));
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			googleAuthenticator.setCredentialRepository(icredentialRepo);
+			if (!googleAuthenticator.authorizeUser(investor.getEmail(), G.i(transferREQ.getGoogleAuthCode()))) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
+			}
 		}
 
 		updateAssets(transferREQ.getId(), WBinout.OUT, transferREQ.getAmount().add(transferREQ.getFee()), true);
@@ -626,7 +659,7 @@ public class InvestorServiceImpl implements InvestorService {
 				BeanUtils.copyProperties(investor, investorBean);
 				investorBean.setGoogleAuthStatus(investor.getGoogleAuthStatus().name());
 				investorBean.setStatus(investor.getStatus().name());
-				
+
 				InvestorExt investorExt = investorExtMapper.selectByPrimaryKey(investor.getId());
 				BeanUtils.copyProperties(investorExt, investorBean, "userId", "email");
 
@@ -642,8 +675,8 @@ public class InvestorServiceImpl implements InvestorService {
 	public void updateStatus(InvestorBean investorBean) {
 		CheckParamUtil.checkBoolean(investorBean.getId() == null, "ID为空");
 		CheckParamUtil.checkEmpty(investorBean.getStatus(), "状态为空");
-		
-		investorMapper.updateStatus(investorBean.getId(),investorBean.getStatus());
+
+		investorMapper.updateStatus(investorBean.getId(), investorBean.getStatus());
 	}
 
 	@Override
@@ -652,13 +685,13 @@ public class InvestorServiceImpl implements InvestorService {
 				i18nService.getMessage(I18nMessageCode.PC_1000_05));
 		CheckParamUtil.checkEmpty(checkGoogleAuthREQ.getGoogleAuthCode(),
 				i18nService.getMessage(I18nMessageCode.PC_1000_07));
-		
+
 		Investor investor = investorMapper.selectByPrimaryKey(checkGoogleAuthREQ.getId());
 		if (investor == null) {
 			throw new BusinessException(
 					i18nService.getMessage(I18nMessageCode.account_id_not_exists, checkGoogleAuthREQ.getId()));
 		}
-		
+
 		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
 			CheckParamUtil.checkEmpty(checkGoogleAuthREQ.getGoogleAuthCode(),
 					i18nService.getMessage(I18nMessageCode.PC_1000_07));
@@ -668,7 +701,195 @@ public class InvestorServiceImpl implements InvestorService {
 				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
 			}
 		}
-		
+
+	}
+
+	@Override
+	@Transactional(rollbackFor = Throwable.class)
+	public void capitalPasswordAdd(CapitalPasswordAddREQ capitalPasswordAddREQ) {
+		CheckParamUtil.checkBoolean(capitalPasswordAddREQ.getId() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		CheckParamUtil.checkEmpty(capitalPasswordAddREQ.getLoginPassword(),
+				i18nService.getMessage(I18nMessageCode.PC_1000_02));
+		CheckParamUtil.checkEmpty(capitalPasswordAddREQ.getCapitalPassword(),
+				i18nService.getMessage(I18nMessageCode.PC_1000_14));
+
+		Investor investor = investorMapper.selectByPrimaryKey(capitalPasswordAddREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, capitalPasswordAddREQ.getId()));
+		}
+
+		if (!DigestUtils.md5Hex(capitalPasswordAddREQ.getLoginPassword()).equals(investor.getPassword())) {
+			throw new BusinessException(i18nService.getMessage(I18nMessageCode.password_error));
+		}
+
+		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+			CheckParamUtil.checkEmpty(capitalPasswordAddREQ.getGoogleAuthCode(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_07));
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			googleAuthenticator.setCredentialRepository(icredentialRepo);
+			if (!googleAuthenticator.authorizeUser(investor.getEmail(),
+					G.i(capitalPasswordAddREQ.getGoogleAuthCode()))) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
+			}
+		}
+
+		investorMapper.updateCapitalPassword(investor.getId(),
+				DigestUtils.md5Hex(capitalPasswordAddREQ.getCapitalPassword()));
+
+	}
+
+	@Override
+	public void capitalPasswordUpdate(CapitalPasswordUpdateREQ capitalPasswordUpdateREQ) {
+		CheckParamUtil.checkBoolean(capitalPasswordUpdateREQ.getId() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		CheckParamUtil.checkEmpty(capitalPasswordUpdateREQ.getCapitalPasswordNew(),
+				i18nService.getMessage(I18nMessageCode.PC_1000_14));
+		CheckParamUtil.checkEmpty(capitalPasswordUpdateREQ.getCapitalPasswordOld(),
+				i18nService.getMessage(I18nMessageCode.PC_1000_14));
+
+		Investor investor = investorMapper.selectByPrimaryKey(capitalPasswordUpdateREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, capitalPasswordUpdateREQ.getId()));
+		}
+
+		if (!DigestUtils.md5Hex(capitalPasswordUpdateREQ.getCapitalPasswordOld())
+				.equals(investor.getCapitalPassword())) {
+			throw new BusinessException(i18nService.getMessage(I18nMessageCode.capital_password_not_match));
+		}
+
+		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+			CheckParamUtil.checkEmpty(capitalPasswordUpdateREQ.getGoogleAuthCode(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_07));
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			googleAuthenticator.setCredentialRepository(icredentialRepo);
+			if (!googleAuthenticator.authorizeUser(investor.getEmail(),
+					G.i(capitalPasswordUpdateREQ.getGoogleAuthCode()))) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
+			}
+		}
+
+		investorMapper.updateCapitalPassword(investor.getId(),
+				DigestUtils.md5Hex(capitalPasswordUpdateREQ.getCapitalPasswordNew()));
+
+	}
+
+	@Override
+	@Transactional(rollbackFor = Throwable.class)
+	public BuyResurrectionCardRES buyResurrectionCard(BuyResurrectionCardREQ buyResurrectionCardREQ) {
+		CheckParamUtil.checkBoolean(buyResurrectionCardREQ.getId() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		CheckParamUtil.checkBoolean(buyResurrectionCardREQ.getAmount() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_15));
+
+		Investor investor = investorMapper.selectByPrimaryKey(buyResurrectionCardREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, buyResurrectionCardREQ.getId()));
+		}
+
+		if (!StringUtils.isEmpty(investor.getCapitalPassword())) {
+			CheckParamUtil.checkEmpty(buyResurrectionCardREQ.getCapitalPassword(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_14));
+			if (!DigestUtils.md5Hex(buyResurrectionCardREQ.getCapitalPassword())
+					.equals(investor.getCapitalPassword())) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.capital_password_not_match));
+			}
+		}
+
+		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
+			CheckParamUtil.checkEmpty(buyResurrectionCardREQ.getGoogleAuthCode(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_07));
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			googleAuthenticator.setCredentialRepository(icredentialRepo);
+			if (!googleAuthenticator.authorizeUser(investor.getEmail(),
+					G.i(buyResurrectionCardREQ.getGoogleAuthCode()))) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.google_auth_check_exception));
+			}
+		}
+
+		Integer rcNum = updateResurrectionCardNum(investor.getId(), WBinout.IN, buyResurrectionCardREQ.getAmount());
+		ResurrectionCardRecord resurrectionCardRecord = new ResurrectionCardRecord();
+		resurrectionCardRecord.setAmount(buyResurrectionCardREQ.getAmount());
+		resurrectionCardRecord.setChannel(WBrcChannel.BUY);
+		resurrectionCardRecord.setCreateTime(new Date());
+		resurrectionCardRecord.setInoutFlag(WBinout.IN);
+		resurrectionCardRecord.setUserId(investor.getId());
+		resurrectionCardRecordMapper.insert(resurrectionCardRecord);
+
+		BigDecimal rcPrice = G.bd(paramSetService.findParamValue(ParamKeys.RESURRECTION_CARD_PRICE),
+				new BigDecimal(100), 8);
+		BigDecimal totalPrice = rcPrice.multiply(new BigDecimal(buyResurrectionCardREQ.getAmount()));
+		updateAssets(investor.getId(), WBinout.OUT, totalPrice, true);
+		TradeRecord tradeRecord = new TradeRecord();
+		tradeRecord.setAmount(totalPrice);
+		tradeRecord.setCreateTime(new Date());
+		tradeRecord.setInoutFlag(WBinout.OUT);
+		tradeRecord.setInvestorId(investor.getId());
+		tradeRecord.setRemark("购买复活卡");
+		tradeRecord.setStatus(TradeRecordStatus.success);
+		tradeRecord.setType(TradeType.buy_resurrection_card);
+		tradeRecordService.insert(tradeRecord);
+
+		BuyResurrectionCardRES result = new BuyResurrectionCardRES();
+		result.setAmount(rcNum);
+		return result;
+	}
+
+	public Integer updateResurrectionCardNum(Long id, WBinout inout, Integer amount) {
+		RLock lock = redissonClient.getLock(Joiner.on("::").join("UPDATE", "RESURRECTION", "CARD", "LOCK", id));
+		lock.lock();
+		InvestorExt investorExt = investorExtMapper.selectByPrimaryKey(id);
+		if (investorExt != null) {
+			if (WBinout.OUT.equals(inout)) {
+				Integer result = investorExt.getResurrectionCard() - amount;
+				if (result >= 0) {
+					investorExt.setResurrectionCard(result);
+				} else {
+					throw new BusinessException("账户[{0}]金额不足", id);
+				}
+			} else {
+				investorExt.setResurrectionCard(investorExt.getResurrectionCard() + amount);
+			}
+
+			investorExtMapper.updateResurrectionCardNum(investorExt.getUserId(), investorExt.getResurrectionCard());
+
+			return investorExt.getResurrectionCard();
+
+		}
+		lock.unlock();
+
+		return null;
+	}
+
+	@Override
+	public UseResurrectionCardRES useResurrectionCard(UseResurrectionCardREQ useResurrectionCardREQ) {
+		CheckParamUtil.checkBoolean(useResurrectionCardREQ.getId() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_05));
+		CheckParamUtil.checkBoolean(useResurrectionCardREQ.getAmount() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_15));
+
+		Investor investor = investorMapper.selectByPrimaryKey(useResurrectionCardREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, useResurrectionCardREQ.getId()));
+		}
+
+		Integer rcNum = updateResurrectionCardNum(investor.getId(), WBinout.OUT, useResurrectionCardREQ.getAmount());
+		ResurrectionCardRecord resurrectionCardRecord = new ResurrectionCardRecord();
+		resurrectionCardRecord.setAmount(useResurrectionCardREQ.getAmount());
+		resurrectionCardRecord.setChannel(WBrcChannel.USE);
+		resurrectionCardRecord.setCreateTime(new Date());
+		resurrectionCardRecord.setInoutFlag(WBinout.OUT);
+		resurrectionCardRecord.setUserId(investor.getId());
+		resurrectionCardRecordMapper.insert(resurrectionCardRecord);
+
+		UseResurrectionCardRES result = new UseResurrectionCardRES();
+		result.setAmount(rcNum);
+
+		return result;
 	}
 
 }

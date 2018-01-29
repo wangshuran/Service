@@ -70,6 +70,14 @@ public enum I18nMessageCode {
 	 */
 	PC_1000_13,
 	/**
+	 * 资金密码为空
+	 */
+	PC_1000_14,
+	/**
+	 *购买数量为空 
+	 */
+	PC_1000_15,
+	/**
 	 * 请先发送邮箱验证码
 	 */
 	EC_1002_01,
@@ -148,5 +156,9 @@ public enum I18nMessageCode {
 	/**
 	 * 投资记录已经结束
 	 */
-	financial_record_finished
+	financial_record_finished, 
+	/**
+	 * 资金密码不匹配
+	 */
+	capital_password_not_match
 }

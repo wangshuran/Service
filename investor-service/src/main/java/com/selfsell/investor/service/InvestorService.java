@@ -5,6 +5,10 @@ import java.util.List;
 
 import com.github.pagehelper.PageInfo;
 import com.selfsell.investor.mybatis.domain.Investor;
+import com.selfsell.investor.share.BuyResurrectionCardREQ;
+import com.selfsell.investor.share.BuyResurrectionCardRES;
+import com.selfsell.investor.share.CapitalPasswordAddREQ;
+import com.selfsell.investor.share.CapitalPasswordUpdateREQ;
 import com.selfsell.investor.share.CheckGoogleAuthREQ;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.FundInfoRES;
@@ -26,6 +30,8 @@ import com.selfsell.investor.share.QueryTransferInfoREQ;
 import com.selfsell.investor.share.QueryTransferInfoRES;
 import com.selfsell.investor.share.TransferREQ;
 import com.selfsell.investor.share.TransferRES;
+import com.selfsell.investor.share.UseResurrectionCardREQ;
+import com.selfsell.investor.share.UseResurrectionCardRES;
 import com.selfsell.investor.share.WBinout;
 
 /**
@@ -131,6 +137,7 @@ public interface InvestorService {
 
 	/**
 	 * 转账
+	 * 
 	 * @param transferREQ
 	 * @return
 	 */
@@ -140,6 +147,7 @@ public interface InvestorService {
 
 	/**
 	 * 转换
+	 * 
 	 * @param list
 	 * @return
 	 */
@@ -149,8 +157,28 @@ public interface InvestorService {
 
 	/**
 	 * 验证google验证
+	 * 
 	 * @param checkGoogleAuthREQ
 	 */
 	void checkGoogleAuth(CheckGoogleAuthREQ checkGoogleAuthREQ);
+
+	void capitalPasswordAdd(CapitalPasswordAddREQ capitalPasswordAddREQ);
+
+	void capitalPasswordUpdate(CapitalPasswordUpdateREQ capitalPasswordUpdateREQ);
+
+	/**
+	 * 购买复活卡
+	 * 
+	 * @param buyResurrectionCardREQ
+	 * @return
+	 */
+	BuyResurrectionCardRES buyResurrectionCard(BuyResurrectionCardREQ buyResurrectionCardREQ);
+
+	/**
+	 * 使用复活卡
+	 * @param useResurrectionCardREQ
+	 * @return
+	 */
+	UseResurrectionCardRES useResurrectionCard(UseResurrectionCardREQ useResurrectionCardREQ);
 
 }

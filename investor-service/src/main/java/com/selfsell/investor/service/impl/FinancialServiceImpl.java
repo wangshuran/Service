@@ -5,9 +5,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.selfsell.common.exception.BusinessException;
 import com.selfsell.common.util.CheckParamUtil;
@@ -59,7 +61,7 @@ public class FinancialServiceImpl implements FinancialService {
 
 	@Autowired
 	ICredentialRepository icredentialRepo;
-	
+
 	@Override
 	public List<FinancialRecord> queryInvestorFinancialRecords(Long id) {
 		Example example = new Example(FinancialRecord.class);
@@ -82,7 +84,15 @@ public class FinancialServiceImpl implements FinancialService {
 			throw new BusinessException(
 					i18nService.getMessage(I18nMessageCode.account_id_not_exists, joinFundPlanREQ.getId()));
 		}
-		
+
+		if (!StringUtils.isEmpty(investor.getCapitalPassword())) {
+			CheckParamUtil.checkEmpty(joinFundPlanREQ.getCapitalPassword(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_14));
+			if (!DigestUtils.md5Hex(joinFundPlanREQ.getCapitalPassword()).equals(investor.getCapitalPassword())) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.capital_password_not_match));
+			}
+		}
+
 		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
 			CheckParamUtil.checkEmpty(joinFundPlanREQ.getGoogleAuthCode(),
 					i18nService.getMessage(I18nMessageCode.PC_1000_07));
@@ -108,14 +118,21 @@ public class FinancialServiceImpl implements FinancialService {
 		tradeRecord.setInvestorId(investor.getId());
 		tradeRecord.setStatus(TradeRecordStatus.success);
 		tradeRecord.setType(TradeType.buy_fund_plan);
+		tradeRecord.setRemark("购买理财");
 		tradeRecordService.insert(tradeRecord);
 
 		FinancialRecord financialRecord = new FinancialRecord();
 		financialRecord.setAmount(joinFundPlanREQ.getAmount());
 		financialRecord.setAnnualRate(fundPlan.getAnnualRate());
+		financialRecord.setCreateTime(new Date());
 		Calendar now = Calendar.getInstance();
-		financialRecord.setCreateTime(now.getTime());
+		now.add(Calendar.DAY_OF_YEAR, 1);// 第二天开始计息
+		now.set(Calendar.HOUR_OF_DAY, 0);
+		now.set(Calendar.MINUTE, 0);
+		now.set(Calendar.SECOND, 0);
+		now.set(Calendar.MILLISECOND, 0);
 		Calendar finish = (Calendar) now.clone();
+		financialRecord.setStartTime(now.getTime());
 		if (WBdateUnit.Y.equals(fundPlan.getTermUnit())) {
 			finish.add(Calendar.YEAR, fundPlan.getTerm());
 		} else if (WBdateUnit.M.equals(fundPlan.getTermUnit())) {
@@ -143,7 +160,15 @@ public class FinancialServiceImpl implements FinancialService {
 			throw new BusinessException(
 					i18nService.getMessage(I18nMessageCode.account_id_not_exists, quitFundPlanREQ.getId()));
 		}
-		
+
+		if (!StringUtils.isEmpty(investor.getCapitalPassword())) {
+			CheckParamUtil.checkEmpty(quitFundPlanREQ.getCapitalPassword(),
+					i18nService.getMessage(I18nMessageCode.PC_1000_14));
+			if (!DigestUtils.md5Hex(quitFundPlanREQ.getCapitalPassword()).equals(investor.getCapitalPassword())) {
+				throw new BusinessException(i18nService.getMessage(I18nMessageCode.capital_password_not_match));
+			}
+		}
+
 		if (GoogleAuthStatus.ON.equals(investor.getGoogleAuthStatus())) {
 			CheckParamUtil.checkEmpty(quitFundPlanREQ.getGoogleAuthCode(),
 					i18nService.getMessage(I18nMessageCode.PC_1000_07));
@@ -177,11 +202,25 @@ public class FinancialServiceImpl implements FinancialService {
 		tradeRecord.setInvestorId(investor.getId());
 		tradeRecord.setStatus(TradeRecordStatus.success);
 		tradeRecord.setType(TradeType.capital);
+		tradeRecord.setRemark("提前退出理财");
 		tradeRecordService.insert(tradeRecord);
 
 		financialRecord.setEndTime(new Date());
 		financialRecord.setStatus(FinancialStatus.POVER);
 		financialRecordMapper.updateByPrimaryKey(financialRecord);
+	}
+
+	@Override
+	public List<FinancialRecord> queryIngRecords() {
+		Example example = new Example(FinancialRecord.class);
+		example.createCriteria().andEqualTo("status", FinancialStatus.ING);
+
+		return financialRecordMapper.selectByExample(example);
+	}
+
+	@Override
+	public void update(FinancialRecord record) {
+		financialRecordMapper.updateByPrimaryKey(record);
 	}
 
 }

@@ -23,6 +23,8 @@ public class TransferREQ implements Serializable{
 	private BigDecimal amount;
 	private String address;
 	private BigDecimal fee;
+	private String googleAuthCode;
+	private String capitalPassword;
 
 	/**
 	 * @return 主键ID
@@ -66,5 +68,29 @@ public class TransferREQ implements Serializable{
 	public void setFee(BigDecimal fee) {
 		this.fee = fee;
 	}
+		
+	/**
+	 * @return google验证码
+	 */
+	public String getGoogleAuthCode() {
+		return googleAuthCode;
+	}
+
+	public void setGoogleAuthCode(String googleAuthCode) {
+		this.googleAuthCode = googleAuthCode;
+	}
+
+		
+	/**
+	 * @return 资金密码
+	 */
+	public String getCapitalPassword() {
+		return capitalPassword;
+	}
+
+	public void setCapitalPassword(String capitalPassword) {
+		this.capitalPassword = capitalPassword;
+	}
+
 
 }

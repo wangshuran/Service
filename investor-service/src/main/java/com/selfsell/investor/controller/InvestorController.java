@@ -13,6 +13,9 @@ import com.selfsell.investor.mybatis.domain.Investor;
 import com.selfsell.investor.service.InvestorService;
 import com.selfsell.investor.service.InviteService;
 import com.selfsell.investor.service.TradeRecordService;
+import com.selfsell.investor.share.BuyResurrectionCardREQ;
+import com.selfsell.investor.share.CapitalPasswordAddREQ;
+import com.selfsell.investor.share.CapitalPasswordUpdateREQ;
 import com.selfsell.investor.share.CheckGoogleAuthREQ;
 import com.selfsell.investor.share.FundInfoREQ;
 import com.selfsell.investor.share.InvestorBean;
@@ -25,9 +28,11 @@ import com.selfsell.investor.share.InvestorResetPasswordREQ;
 import com.selfsell.investor.share.InviteInfoREQ;
 import com.selfsell.investor.share.ModifyPasswordREQ;
 import com.selfsell.investor.share.QueryTransferInfoREQ;
+import com.selfsell.investor.share.TradeInfoPageREQ;
 import com.selfsell.investor.share.TradeInfoREQ;
 import com.selfsell.investor.share.TransferREQ;
 import com.selfsell.investor.share.Urls;
+import com.selfsell.investor.share.UseResurrectionCardREQ;
 
 @RestController
 public class InvestorController {
@@ -89,6 +94,10 @@ public class InvestorController {
 	ResultMap tradeInfo(@RequestBody TradeInfoREQ tradeInfoREQ) {
 		return ResultMap.successResult(tradeRecordService.tradeInfo(tradeInfoREQ));
 	}
+	@RequestMapping(value = Urls.TRADE_INFO_PAGE)
+	ResultMap tradeInfoPage(@RequestBody TradeInfoPageREQ tradeInfoPageREQ) {
+		return ResultMap.successResult(tradeRecordService.tradeInfoPage(tradeInfoPageREQ));
+	}
 
 	@RequestMapping(value = Urls.QUERY_TRANSFER_INFO)
 	ResultMap queryTransferInfo(@RequestBody QueryTransferInfoREQ queryTransferInfoREQ) {
@@ -123,5 +132,33 @@ public class InvestorController {
 		investorService.checkGoogleAuth(checkGoogleAuthREQ);
 		
 		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.CAPITAL_PASSWORD_ADD)
+	ResultMap capitalPasswordAdd(@RequestBody CapitalPasswordAddREQ capitalPasswordAddREQ) {
+		
+		investorService.capitalPasswordAdd(capitalPasswordAddREQ);
+		
+		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.CAPITAL_PASSWORD_UPDATE)
+	ResultMap capitalPasswordUpdate(@RequestBody CapitalPasswordUpdateREQ capitalPasswordUpdateREQ) {
+		
+		investorService.capitalPasswordUpdate(capitalPasswordUpdateREQ);
+		
+		return ResultMap.successResult();
+	}
+	
+	@RequestMapping(value = Urls.BUY_RESURRECTION_CARD)
+	ResultMap buyResurrectionCard(@RequestBody BuyResurrectionCardREQ buyResurrectionCardREQ) {
+		
+		return ResultMap.successResult(investorService.buyResurrectionCard(buyResurrectionCardREQ));
+	}
+	
+	@RequestMapping(value = Urls.USE_RESURRECTION_CARD)
+	ResultMap useResurrectionCard(@RequestBody UseResurrectionCardREQ useResurrectionCardREQ) {
+		
+		return ResultMap.successResult(investorService.useResurrectionCard(useResurrectionCardREQ));
 	}
 }

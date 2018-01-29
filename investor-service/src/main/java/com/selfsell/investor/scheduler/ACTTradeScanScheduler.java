@@ -158,6 +158,7 @@ public class ACTTradeScanScheduler implements InitializingBean {
 			tradeRecord.setCreateTime(new Date());
 			tradeRecord.setInvestorId(investor.getId());
 			tradeRecord.setType(TradeType.transfer_in);
+			tradeRecord.setRemark("存入");
 			tradeRecord.setsAddress(scanTradeRecord.getFromAddress());
 			tradeRecord.settAddress(scanTradeRecord.getAddress());
 			tradeRecord.setStatus(TradeRecordStatus.success);

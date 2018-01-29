@@ -153,4 +153,18 @@ public class Urls {
 	public static final String NEWS_DEL = "/news/del";
 	public static final String NEWS_UPDATE_STATUS = "/news/update/status";
 	public static final String NEWS = "/news";
+	public static final String CAPITAL_PASSWORD_ADD = "/investor/capital/password/add";
+	public static final String CAPITAL_PASSWORD_UPDATE = "/investor/capital/password/update";
+	/**
+	 * 购买复活卡
+	 */
+	public static final String BUY_RESURRECTION_CARD = "/resurrection/card/buy";
+	/**
+	 * 分页查询交易记录
+	 */
+	public static final String TRADE_INFO_PAGE = "/trade/info/page";
+	/**
+	 * 使用复活卡
+	 */
+	public static final String USE_RESURRECTION_CARD = "/resurrection/card/use";
 }

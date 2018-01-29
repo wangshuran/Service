@@ -1,13 +1,11 @@
 package com.selfsell.investor.service.impl;
 
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.selfsell.common.util.G;
 import com.selfsell.investor.bean.CurrencyType;
 import com.selfsell.investor.service.TokenPriceService;
 
@@ -28,23 +26,25 @@ public class TokenPriceServiceOkex implements TokenPriceService {
 
 	@Override
 	public BigDecimal queryPrice(String token, CurrencyType currencyType) {
-		String url = MessageFormat.format(BASE_USDT_URL, token);
-		TickerRes tickerRes = restTemplate.getForObject(url, TickerRes.class);
-
-		if (tickerRes != null) {
-			BigDecimal usdPrice = G.bd(tickerRes.getTicker().getLast(), 8);
-			if (currencyType.equals(CurrencyType.CNY)) {
-				ExchangeRate exchangeRate = restTemplate.getForObject(EXCHANGE_RATE_URL, ExchangeRate.class);
-				if (exchangeRate != null) {
-					return usdPrice.multiply(G.bd(exchangeRate.getRate(), 8));
-				} else {
-					return usdPrice.multiply(DEFAULT_RATE);
-				}
-			}
-
-			return usdPrice;
-		}
-		return BigDecimal.ZERO;
+//		String url = MessageFormat.format(BASE_USDT_URL, token);
+//		TickerRes tickerRes = restTemplate.getForObject(url, TickerRes.class);
+//
+//		if (tickerRes != null) {
+//			BigDecimal usdPrice = G.bd(tickerRes.getTicker().getLast(), 8);
+//			if (currencyType.equals(CurrencyType.CNY)) {
+//				ExchangeRate exchangeRate = restTemplate.getForObject(EXCHANGE_RATE_URL, ExchangeRate.class);
+//				if (exchangeRate != null) {
+//					return usdPrice.multiply(G.bd(exchangeRate.getRate(), 8));
+//				} else {
+//					return usdPrice.multiply(DEFAULT_RATE);
+//				}
+//			}
+//
+//			return usdPrice;
+//		}
+//		return BigDecimal.ZERO;
+		
+		return new BigDecimal("0.12");
 	}
 
 	public static class ExchangeRate {

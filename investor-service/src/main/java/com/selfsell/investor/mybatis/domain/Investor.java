@@ -32,6 +32,7 @@ public class Investor implements Serializable {
 	private String inviteCode;// 邀请码
 	private Date createTime;// 注册时间
 	private String sscAddress;//分配ssc地址
+	private String capitalPassword;//资金密码
 
 	public Long getId() {
 		return id;
@@ -95,6 +96,14 @@ public class Investor implements Serializable {
 
 	public void setStatus(WBinvestorStatus status) {
 		this.status = status;
+	}
+
+	public String getCapitalPassword() {
+		return capitalPassword;
+	}
+
+	public void setCapitalPassword(String capitalPassword) {
+		this.capitalPassword = capitalPassword;
 	}
 
 }

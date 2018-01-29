@@ -32,6 +32,7 @@ public class FinancialRecord implements Serializable {
 	private Long fundPlanId;// 资金计划
 	private BigDecimal annualRate;// 年收益
 	private Date createTime;// 记录时间
+	private Date startTime;//计息日期
 	private Date finishTime;// 正常完成时间
 	private Date endTime;// 结束时间
 	private BigDecimal amount;// 交易数量
@@ -116,6 +117,14 @@ public class FinancialRecord implements Serializable {
 
 	public void setStatus(FinancialStatus status) {
 		this.status = status;
+	}
+
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
 	}
 
 }

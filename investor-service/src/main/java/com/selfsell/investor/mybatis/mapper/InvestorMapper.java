@@ -17,8 +17,11 @@ public interface InvestorMapper extends Mapper<Investor> {
 			@Param(value = "googleAuthStatus") String googleAuthStatus);
 
 	@Update("update investor set password=#{password} where id=#{id}")
-	public void resetPwd(@Param(value = "id")Long id, @Param(value = "password")String password);
+	public void resetPwd(@Param(value = "id") Long id, @Param(value = "password") String password);
 
 	@Update("update investor set status=#{status} where id=#{id}")
 	public void updateStatus(@Param(value = "id") Long id, @Param(value = "status") String status);
+
+	@Update("update investor set capital_password=#{password} where id=#{id}")
+	public void updateCapitalPassword(@Param(value = "id") Long id, @Param(value = "password") String password);
 }

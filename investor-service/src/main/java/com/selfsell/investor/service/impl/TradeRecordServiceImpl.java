@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
 import com.selfsell.common.exception.BusinessException;
 import com.selfsell.common.util.CheckParamUtil;
@@ -16,6 +18,9 @@ import com.selfsell.investor.mybatis.mapper.InvestorMapper;
 import com.selfsell.investor.mybatis.mapper.TradeRecordMapper;
 import com.selfsell.investor.service.I18nService;
 import com.selfsell.investor.service.TradeRecordService;
+import com.selfsell.investor.share.TradeInfoPageREQ;
+import com.selfsell.investor.share.TradeInfoPageRES;
+import com.selfsell.investor.share.TradeInfoPageRES.ElementTradeList;
 import com.selfsell.investor.share.TradeInfoREQ;
 import com.selfsell.investor.share.TradeInfoRES;
 
@@ -25,7 +30,7 @@ import tk.mybatis.mapper.entity.Example;
 public class TradeRecordServiceImpl implements TradeRecordService {
 	@Autowired
 	TradeRecordMapper tradeRecordMapper;
-	
+
 	@Autowired
 	I18nService i18nService;
 
@@ -41,9 +46,9 @@ public class TradeRecordServiceImpl implements TradeRecordService {
 
 	@Override
 	public void updateTranserStatus(String txId, TradeRecordStatus status) {
-		
-		tradeRecordMapper.updateTranserStatus(txId,status.name());
-		
+
+		tradeRecordMapper.updateTranserStatus(txId, status.name());
+
 	}
 
 	@Override
@@ -77,7 +82,7 @@ public class TradeRecordServiceImpl implements TradeRecordService {
 	public List<TradeRecord> queryInvestorTrade(Long investorId) {
 		Example example = new Example(TradeRecord.class);
 		example.createCriteria().andEqualTo("investorId", investorId);
-		
+
 		example.orderBy("createTime").desc();
 
 		return tradeRecordMapper.selectByExample(example);
@@ -86,6 +91,45 @@ public class TradeRecordServiceImpl implements TradeRecordService {
 	@Override
 	public void updateStatus(Long tradeRecordId, TradeRecordStatus status) {
 		tradeRecordMapper.updateStatus(tradeRecordId, status.name());
-		
+
+	}
+
+	@Override
+	public TradeInfoPageRES tradeInfoPage(TradeInfoPageREQ tradeInfoPageREQ) {
+		CheckParamUtil.checkBoolean(tradeInfoPageREQ.getId() == null,
+				i18nService.getMessage(I18nMessageCode.PC_1000_05));
+
+		Investor investor = investorMapper.selectByPrimaryKey(tradeInfoPageREQ.getId());
+		if (investor == null) {
+			throw new BusinessException(
+					i18nService.getMessage(I18nMessageCode.account_id_not_exists, tradeInfoPageREQ.getId()));
+		}
+		Example example = new Example(TradeRecord.class);
+		example.createCriteria().andEqualTo("investorId", tradeInfoPageREQ.getId());
+
+		example.orderBy("createTime").desc();
+
+		PageHelper.startPage(tradeInfoPageREQ.getPage() - 1, tradeInfoPageREQ.getLimit(), true);
+		List<TradeRecord> resultList = tradeRecordMapper.selectByExample(example);
+		PageInfo<TradeRecord> pageInfo = new PageInfo<TradeRecord>(resultList);
+
+		TradeInfoPageRES result = new TradeInfoPageRES();
+		result.setTotalAmount(pageInfo.getTotal());
+
+		List<ElementTradeList> tradeList = Lists.newArrayList();
+
+		for (TradeRecord tradeRecord : pageInfo.getList()) {
+			ElementTradeList tradeInfo = new ElementTradeList();
+			tradeInfo.setTime(tradeRecord.getCreateTime());
+			tradeInfo.setRemark(tradeRecord.getRemark());
+			tradeInfo.setAmount(tradeRecord.getAmount());
+			tradeInfo.setIoFlag(tradeRecord.getInoutFlag().name());
+			tradeInfo.setStatus(tradeRecord.getStatus().name());
+			tradeInfo.setTradeType(tradeRecord.getType().name());
+			tradeList.add(tradeInfo);
+		}
+		result.setTradeList(tradeList);
+
+		return result;
 	}
 }

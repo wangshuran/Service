@@ -23,6 +23,7 @@ public class JoinFundPlanREQ implements Serializable{
 	private Long fundPlanId;
 	private BigDecimal amount;
 	private String googleAuthCode;
+	private String capitalPassword;
 
 	/**
 	 * @return 主键ID
@@ -64,6 +65,18 @@ public class JoinFundPlanREQ implements Serializable{
 
 	public void setGoogleAuthCode(String googleAuthCode) {
 		this.googleAuthCode = googleAuthCode;
+	}
+
+		
+	/**
+	 * @return 资金密码
+	 */
+	public String getCapitalPassword() {
+		return capitalPassword;
+	}
+
+	public void setCapitalPassword(String capitalPassword) {
+		this.capitalPassword = capitalPassword;
 	}
 
 
